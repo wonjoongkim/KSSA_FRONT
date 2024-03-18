@@ -1,0 +1,24 @@
+.blur-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.blur-container::before,
+.blur-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px; /* 좌우 끝부분의 너비를 조절하세요 */
+    background: inherit;
+    filter: blur(10px); /* 블러 처리 강도를 조절하세요 */
+    z-index: -1;
+}
+
+.blur-container::before {
+    left: 0;
+}
+
+.blur-container::after {
+    right: 0;
+}

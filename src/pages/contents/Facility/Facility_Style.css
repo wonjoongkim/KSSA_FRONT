@@ -1,0 +1,44 @@
+#components-grid-demo-flex [class~='ant-row'] {
+    background: rgba(128, 128, 128, 0.08);
+}
+
+.image-container {
+    display: grid;
+    place-items: center;
+    max-width: 100%; /* 부모 컨테이너의 최대 너비까지만 확장 */
+    overflow: hidden; /* 부모 컨테이너를 넘어가는 부분은 숨김 */
+}
+
+.responsive-image {
+    max-width: 100%;
+    max-height: 100%;
+    padding: 0;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* 풀 화면일 때 이미지 크기 조절 */
+@media screen and (min-width: 1000px) {
+    .responsive-image {
+        width: 100%;
+        min-height: 80%;
+    }
+}
+
+.responsive-image_one {
+    max-width: 100%;
+    max-height: 100%;
+    padding: 0;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* 풀 화면일 때 이미지 크기 조절 */
+@media screen and (min-width: 1000px) {
+    .responsive-image_one {
+        width: 50%;
+        min-height: 80%;
+    }
+}

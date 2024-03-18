@@ -1,0 +1,87 @@
+/* Style.css */
+.evalu_rowstyle {
+    border: 2px solid #e0e0e0;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.evalu_colstyle,
+.evalu_colstyle_sub {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+
+.evalu_colstyle {
+    background-color: #e0e0e0;
+    border-top-left-radius: 5px; /* 위쪽 왼쪽 모서리만 적용 */
+    border-top-right-radius: 5px; /* 위쪽 오른쪽 모서리만 적용 */
+    font-weight: 600;
+}
+
+.evalu_colstyle_sub {
+    border: 1px solid #e0e0e0;
+    border-bottom-left-radius: 5px; /* 위쪽 왼쪽 모서리만 적용 */
+    border-bottom-right-radius: 5px; /* 위쪽 오른쪽 모서리만 적용 */
+}
+
+.evalu_colstyle_sub:hover {
+    background-color: #bdd0f8; /* 마우스 오버 시의 배경 색상 */
+}
+
+.evalu_tagstyle {
+    width: 80px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+}
+:where(.css-dev-only-do-not-override-190m0jy).ant-input-group > .ant-input:last-child,
+:where(.css-dev-only-do-not-override-190m0jy).ant-input-group .ant-input-group-addon:last-child {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    height: 55px;
+}
+
+:where(.css-dev-only-do-not-override-190m0jy).ant-input-group .ant-input-affix-wrapper:not(:first-child),
+.ant-input-search :where(.css-dev-only-do-not-override-190m0jy).ant-input-group .ant-input-affix-wrapper:not(:first-child) {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    height: 55px;
+}
+
+:where(.css-dev-only-do-not-override-190m0jy).ant-table-wrapper .ant-table-thead > tr > th,
+:where(.css-dev-only-do-not-override-190m0jy).ant-table-wrapper .ant-table-thead > tr > td {
+    position: relative;
+    color: rgba(0, 0, 0, 0.88);
+    font-weight: 600;
+    text-align: start;
+    background: #a5a4a4;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease;
+}
+
+@media (max-width: 767px) {
+    .evalu_colstyle {
+        background-color: #e0e0e0;
+        border-top-right-radius: 0px; /* 위쪽 오른쪽 모서리만 적용 */
+        border-bottom-right-radius: 0px; /* 위쪽 왼쪽 모서리만 적용 */
+        border-top-left-radius: 5px; /* 위쪽 오른쪽 모서리만 적용 */
+        border-bottom-left-radius: 5px; /* 위쪽 왼쪽 모서리만 적용 */
+    }
+
+    .evalu_colstyle_sub {
+        border: 1px solid #e0e0e0;
+        border-top-right-radius: 5px; /* 위쪽 왼쪽 모서리만 적용 */
+        border-bottom-right-radius: 5px; /* 위쪽 오른쪽 모서리만 적용 */
+        border-top-left-radius: 0px; /* 위쪽 오른쪽 모서리만 적용 */
+        border-bottom-left-radius: 0px; /* 위쪽 왼쪽 모서리만 적용 */
+    }
+}

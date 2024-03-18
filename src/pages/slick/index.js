@@ -1,0 +1,1 @@
+export { Slick } from './Slick';
