@@ -100,8 +100,8 @@ const CalenderApp = () => {
             ? setEventsViewContainer({
                   id: CalenderViewResponse?.data?.RET_DATA[0].Idx,
                   title: CalenderViewResponse?.data?.RET_DATA[0].Edu_Nm,
-                  start: CalenderViewResponse?.data?.RET_DATA[0].Edu_Date_Start,
-                  end: CalenderViewResponse?.data?.RET_DATA[0].Edu_Date_End,
+                  start: CalenderViewResponse?.data?.RET_DATA[0].Edu_Date_Start.slice(0, 10),
+                  end: CalenderViewResponse?.data?.RET_DATA[0].Edu_Date_End.slice(0, 10),
                   constraint: 'availableForMeeting',
                   allDay: true,
                   color:
@@ -335,7 +335,7 @@ const CalenderApp = () => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {eventsViewContainer.start.slice(0, 10)}
+                                {eventsViewContainer.start}
                             </Card>
                         </Col>
                         <Col span={8}>
@@ -360,7 +360,7 @@ const CalenderApp = () => {
                                     fontSize: '15px'
                                 }}
                             >
-                                {eventsViewContainer.end.slice(0, 10)}
+                                {eventsViewContainer.end}
                             </Card>
                         </Col>
                         <Col span={8}>
