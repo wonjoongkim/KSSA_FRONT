@@ -11,7 +11,7 @@ import { HolderOutlined, PushpinOutlined, SoundOutlined, LineOutlined } from '@a
 
 // project import
 import MainCard from 'components/MainCard';
-import CalenderApp from '../calender/CalenderApp';
+import CalenderApp from 'pages/calender/CalenderApp';
 import Slick from '../slick/Slick';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
