@@ -5,14 +5,16 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { Row, Col, Modal, Button, Card } from 'antd';
-
 import interactionPlugin from '@fullcalendar/interaction';
 
+// ==================================================================================================
+// API Hooks Start
 import { useCalenderListMutation, useCalenderViewMutation } from '../../hooks/api/CalenderManagement/CalenderManagement';
+// API Hooks End
+// ==================================================================================================
 
 import './Style.css';
 const CalenderApp = () => {
-    // const { confirm } = Modal;
     const calendarRef = useRef(null);
     const [EventClickModal, setEventClickModal] = useState(false); // 이벤트 클릭 모달
     const [eventsListContainer, setEventsListContainer] = useState([]); // 이벤트 리스트 정보
@@ -26,8 +28,10 @@ const CalenderApp = () => {
     // ==================================================================================================
 
     // ==================================================================================================
+    // ==================================================================================================
     // API INTERFACE START
 
+    // ==================================================================================================
     // 교육일정 정보 (Calender List)
     const [CalenderList] = useCalenderListMutation();
     const handelCalenderList = async () => {
@@ -90,6 +94,7 @@ const CalenderApp = () => {
             : '';
     };
 
+    // ==================================================================================================
     // 교육일정 상세 (Calender View)
     const [CalenderView] = useCalenderViewMutation();
     const handelCalenderView = async (idx) => {
@@ -154,6 +159,7 @@ const CalenderApp = () => {
             : '';
     };
     // API INTERFACE END
+    // ==================================================================================================
     // ==================================================================================================
 
     useEffect(() => {

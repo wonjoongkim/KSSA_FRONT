@@ -155,3 +155,11 @@
     border: '0px';
     font-size: '18px';
 }
+
+/* 윈도우 창의 너비가 768px보다 작을 경우 */
+@media (max-width: 768px) {
+    .fc .fc-toolbar {
+        text-align: center;
+        display: block;
+    }
+}

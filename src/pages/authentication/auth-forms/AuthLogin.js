@@ -94,6 +94,8 @@ const AuthLogin = (props) => {
                 if (saveIDFlag) localStorage.setItem(LS_KEY_ID, userMember_LoginResponse?.data?.RET_DATA?.USER_ID);
             }
 
+            form.resetFields();
+
             setTimeout(() => {
                 navigate('/');
                 props.ModalClose();
@@ -150,7 +152,7 @@ const AuthLogin = (props) => {
                         .min(4, <span style={{ fontSize: '14px', fontWeight: '600' }}>4자 이상 입력해주세요!</span>),
                     PassWord: Yup.string()
                         .required(<span style={{ fontSize: '14px', fontWeight: '600' }}>비밀번호를 입력해주세요.</span>)
-                        .min(4, <span style={{ fontSize: '14px', fontWeight: '600' }}>4자 이상 입력해주세요!</span>)
+                        .min(3, <span style={{ fontSize: '14px', fontWeight: '600' }}>4자 이상 입력해주세요!</span>)
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -226,31 +228,6 @@ const AuthLogin = (props) => {
                                     )}
                                 </Stack>
                             </Grid>
-
-                            <Grid item xs={12} sx={{ mt: -1 }}>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={saveIDFlag}
-                                                onChange={handleSaveIDFlag}
-                                                name="saveId"
-                                                id="saveId"
-                                                color="primary"
-                                                size="small"
-                                            />
-                                        }
-                                        label={<Typography variant="h6">아이디 저장</Typography>}
-                                    />
-                                    <Button
-                                        type="text"
-                                        onClick={() => setSearchModalOpen(true)}
-                                        style={{ backgroundColor: '#aaaaaa', color: '#ffffff', borderRadius: '5px' }}
-                                    >
-                                        아이디 / 비밀번호를 잊으셨나요?
-                                    </Button>
-                                </Stack>
-                            </Grid>
                             {errors.submit && (
                                 <Grid item xs={12}>
                                     <FormHelperText error>{errors.submit}</FormHelperText>
@@ -274,7 +251,30 @@ const AuthLogin = (props) => {
                     </form>
                 )}
             </Formik>
-
+            <Grid item xs={12} sx={{ mt: 1.5 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={saveIDFlag}
+                                onChange={handleSaveIDFlag}
+                                name="saveId"
+                                id="saveId"
+                                color="primary"
+                                size="small"
+                            />
+                        }
+                        label={<Typography variant="h6">아이디 저장</Typography>}
+                    />
+                    <Button
+                        type="text"
+                        onClick={() => setSearchModalOpen(true)}
+                        style={{ backgroundColor: '#aaaaaa', color: '#ffffff', borderRadius: '5px' }}
+                    >
+                        아이디 / 비밀번호를 잊으셨나요?
+                    </Button>
+                </Stack>
+            </Grid>
             {/* 아이디 찾기 | 비번 변경 폼 모달 창 Start */}
             <Modal
                 maskClosable={false}

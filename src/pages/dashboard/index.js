@@ -57,36 +57,36 @@ export const DashboardDefault = () => {
     return (
         <>
             <Divider />
-            <Row gutter={[48, 8]}>
+            <Row gutter={[18, 8]}>
                 <Col span={8}>
-                    <Card style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Card style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F5DC' }}>
                         <Statistic
-                            title={<div style={{ fontSize: '21px', color: '#444', fontWeight: '700' }}>전체 교육</div>}
+                            title={<div style={{ fontSize: '19px', color: '#444', fontWeight: '700' }}>전체 교육</div>}
                             value={112893}
                             formatter={formatter}
-                            style={{ fontWeight: '600', fontSize: '21px' }}
+                            style={{ fontWeight: '600', fontSize: '19px' }}
                         />
                     </Card>
                 </Col>
                 <Col span={8}>
-                    <Card style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Card style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#D0EAD0' }}>
                         <Statistic
-                            title={<div style={{ fontSize: '21px', color: '#444', fontWeight: '700' }}>교육중</div>}
+                            title={<div style={{ fontSize: '19px', color: '#444', fontWeight: '700' }}>교육중</div>}
                             value={167}
                             precision={2}
                             formatter={formatter}
-                            style={{ fontWeight: '600', fontSize: '21px' }}
+                            style={{ fontWeight: '600', fontSize: '19px' }}
                         />
                     </Card>
                 </Col>
                 <Col span={8}>
-                    <Card style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Card style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFE4E1' }}>
                         <Statistic
-                            title={<div style={{ fontSize: '21px', color: '#444', fontWeight: '700' }}>이수교육</div>}
+                            title={<div style={{ fontSize: '19px', color: '#444', fontWeight: '700' }}>이수교육</div>}
                             value={1821}
                             precision={2}
                             formatter={formatter}
-                            style={{ fontWeight: '600', fontSize: '21px' }}
+                            style={{ fontWeight: '600', fontSize: '19px' }}
                         />
                     </Card>
                 </Col>
@@ -120,7 +120,7 @@ export const DashboardDefault = () => {
 
             {/* 교육안내, 공지사항 */}
             <Row gutter={[48, 16]}>
-                <Col span={12}>
+                <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                     <Card
                         bordered={true}
                         title={
@@ -152,13 +152,13 @@ export const DashboardDefault = () => {
                                             </a>
                                         }
                                     />
-                                    <div>{item.date}</div>
+                                    <div style={{ width: '110px', textAlign: 'right' }}>{item.date}</div>
                                 </List.Item>
                             )}
                         />
                     </Card>
                 </Col>
-                <Col span={12}>
+                <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                     <Card
                         bordered={true}
                         title={
@@ -190,7 +190,7 @@ export const DashboardDefault = () => {
                                             </a>
                                         }
                                     />
-                                    <div>{item.date}</div>
+                                    <div style={{ width: '110px', textAlign: 'right' }}>{item.date}</div>
                                 </List.Item>
                             )}
                         />
