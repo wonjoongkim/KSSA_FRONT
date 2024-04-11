@@ -16,7 +16,7 @@ import { useCalenderListMutation, useCalenderViewMutation } from '../../hooks/ap
 import './Style.css';
 const CalenderApp = () => {
     const calendarRef = useRef(null);
-    const [EventClickModal, setEventClickModal] = useState(false); // 이벤트 클릭 모달
+    const [eventClickModal, setEventClickModal] = useState(false); // 이벤트 클릭 모달
     const [eventsListContainer, setEventsListContainer] = useState([]); // 이벤트 리스트 정보
     const [eventsViewContainer, setEventsViewContainer] = useState([]); // 이벤트 상세 정보
 
@@ -219,7 +219,7 @@ const CalenderApp = () => {
             {/* 모달 창 Start */}
             <Modal
                 maskClosable={false}
-                open={EventClickModal}
+                open={eventClickModal}
                 onOk={handleEventClickModal_Close}
                 closable={false}
                 width={450}
