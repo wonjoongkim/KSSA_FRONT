@@ -14,40 +14,44 @@ import { theoryGroupManagement } from '../hooks/api/TheoryGroupManagement/Theory
 import { statisticsManagement } from '../hooks/api/StatisticsManagement/StatisticsManagement';
 
 import { calenderManagement } from '../hooks/api/CalenderManagement/CalenderManagement';
+import { boardManagement } from 'hooks/api/BoardManagement/BoardManagement';
+import { fileManagement } from 'hooks/api/FileManagement/FIleManagement';
 
 // ==============================|| REDUX TOOLKIT - MAIN STORE ||============================== //
 
 export const store = configureStore({
     reducer: {
+        [boardManagement.reducerPath]: boardManagement.reducer,
+        [calenderManagement.reducerPath]: calenderManagement.reducer,
+        [contentsManagement.reducerPath]: contentsManagement.reducer,
+        [curriculumManagement.reducerPath]: curriculumManagement.reducer,
+        [eduManagement.reducerPath]: eduManagement.reducer,
+        [fileManagement.reducerPath]: fileManagement.reducer,
+        [learningMaqnagement.reducerPath]: learningMaqnagement.reducer,
         [loginManagement.reducerPath]: loginManagement.reducer,
         [mainManagement.reducerPath]: mainManagement.reducer,
-        [contentsManagement.reducerPath]: contentsManagement.reducer,
-        [learningMaqnagement.reducerPath]: learningMaqnagement.reducer,
-        [eduManagement.reducerPath]: eduManagement.reducer,
-        [studentsManagement.reducerPath]: studentsManagement.reducer,
         [preferencesManagement.reducerPath]: preferencesManagement.reducer,
-        [curriculumManagement.reducerPath]: curriculumManagement.reducer,
-        [teacherManagement.reducerPath]: teacherManagement.reducer,
-        [theoryGroupManagement.reducerPath]: theoryGroupManagement.reducer,
         [statisticsManagement.reducerPath]: statisticsManagement.reducer,
-
-        [calenderManagement.reducerPath]: calenderManagement.reducer
+        [studentsManagement.reducerPath]: studentsManagement.reducer,
+        [teacherManagement.reducerPath]: teacherManagement.reducer,
+        [theoryGroupManagement.reducerPath]: theoryGroupManagement.reducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
+            .concat(boardManagement.middleware)
+            .concat(calenderManagement.middleware)
+            .concat(contentsManagement.middleware)
+            .concat(curriculumManagement.middleware)
+            .concat(eduManagement.middleware)
+            .concat(fileManagement.middleware)
+            .concat(learningMaqnagement.middleware)
             .concat(loginManagement.middleware)
             .concat(mainManagement.middleware)
-            .concat(contentsManagement.middleware)
-            .concat(learningMaqnagement.middleware)
-            .concat(eduManagement.middleware)
-            .concat(studentsManagement.middleware)
             .concat(preferencesManagement.middleware)
-            .concat(curriculumManagement.middleware)
+            .concat(statisticsManagement.middleware)
+            .concat(studentsManagement.middleware)
             .concat(teacherManagement.middleware)
             .concat(theoryGroupManagement.middleware)
-            .concat(statisticsManagement.middleware)
-
-            .concat(calenderManagement.middleware)
 });
 
 setupListeners(store.dispatch);

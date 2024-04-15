@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types';
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetLoginInfoMutation } from '../../../../../hooks/api/MainManagement/MainManagement';
+import { useMemberInfoMutation } from '../../../../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../../../../services/core/User/Token';
 
 // 토큰
@@ -47,7 +47,7 @@ const Profile = () => {
     const theme = useTheme();
     const navigate = useNavigate();
     const iconBackColorOpen = 'grey.300';
-    const [getLoginInfo] = useGetLoginInfoMutation();
+    const [MemberInfo] = useMemberInfoMutation();
 
     // 로그인 토큰 정보
     const [userToken] = useUserToken();

@@ -26,26 +26,29 @@ import { Admission } from 'pages/contents/Admission'; // 입교절차
 import { Reason } from 'pages/contents/Reason'; // 관련근거
 import { Application } from 'pages/contents/Application'; // 신청방법
 
-import { Notification } from 'pages/contents/Notification'; // 공지사항
-import { View as Notification_View } from 'pages/contents/Notification';
+import { Lists } from 'pages/contents/Board/Lists'; // 게시판, 자료실 List
+import { Views } from 'pages/contents/Board/Views'; // 게시판, 자료실 View
 
-import { Education } from 'pages/contents/Education'; // 교육안내
-import { View as Education_View } from 'pages/contents/Education';
+// import { Notification } from 'pages/contents/Notification'; // 공지사항
+// import { View as Notification_View } from 'pages/contents/Notification';
 
-import { Faq } from 'pages/contents/Faq'; // Faq
-import { View as Faq_View } from 'pages/contents/Faq';
+// import { Education } from 'pages/contents/Education'; // 교육안내
+// import { View as Education_View } from 'pages/contents/Education';
+
+// import { Faq } from 'pages/contents/Faq'; // Faq
+// import { View as Faq_View } from 'pages/contents/Faq';
 
 import { Picture } from 'pages/contents/Picture'; // 사진자료
 import { View as Picture_View } from 'pages/contents/Picture';
 
-import { News } from 'pages/contents/News'; // 최신뉴스
-import { View as News_View } from 'pages/contents/News';
+// import { News } from 'pages/contents/News'; // 최신뉴스
+// import { View as News_View } from 'pages/contents/News';
 
-import { Laws } from 'pages/contents/Laws'; // 관련법령
-import { View as Laws_View } from 'pages/contents/Laws';
+// import { Laws } from 'pages/contents/Laws'; // 관련법령
+// import { View as Laws_View } from 'pages/contents/Laws';
 
-import { Datum } from 'pages/contents/Datum'; // 교육자료
-import { View as Datum_View } from 'pages/contents/Datum';
+// import { Datum } from 'pages/contents/Datum'; // 교육자료
+// import { View as Datum_View } from 'pages/contents/Datum';
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -129,35 +132,46 @@ const MainRoutes = {
             element: <Application />
         },
         {
-            // 공지사항
-            path: 'contents/Notification',
-            element: <Notification />
+            // 게시판, 자료실
+            path: 'contents/Board/Lists',
+            element: <Lists />
         },
         {
-            // 공지사항_View
-            path: 'contents/Notification/View',
-            element: <Notification_View />
+            // 게시판, 자료실
+            path: 'contents/Board/Views',
+            element: <Views />
         },
-        {
-            // 교육안내
-            path: 'contents/Education',
-            element: <Education />
-        },
-        {
-            // 교육안내_View
-            path: 'contents/Education/View',
-            element: <Education_View />
-        },
-        {
-            // Faq
-            path: 'contents/Faq',
-            element: <Faq />
-        },
-        {
-            // Faq_View
-            path: 'contents/Faq/View',
-            element: <Faq_View />
-        },
+
+        // {
+        //     // 공지사항
+        //     path: 'contents/Notification',
+        //     element: <Notification />
+        // },
+        // {
+        //     // 공지사항_View
+        //     path: 'contents/Notification/View',
+        //     element: <Notification_View />
+        // },
+        // {
+        //     // 교육안내
+        //     path: 'contents/Education',
+        //     element: <Education />
+        // },
+        // {
+        //     // 교육안내_View
+        //     path: 'contents/Education/View',
+        //     element: <Education_View />
+        // },
+        // {
+        //     // Faq
+        //     path: 'contents/Faq',
+        //     element: <Faq />
+        // },
+        // {
+        //     // Faq_View
+        //     path: 'contents/Faq/View',
+        //     element: <Faq_View />
+        // },
         {
             // 사진자료
             path: 'contents/Picture',
@@ -167,37 +181,37 @@ const MainRoutes = {
             // 사진자료_View
             path: 'contents/Picture/View',
             element: <Picture_View />
-        },
-        {
-            // 최신뉴스
-            path: 'contents/News',
-            element: <News />
-        },
-        {
-            // 최신뉴스_View
-            path: 'contents/News/View',
-            element: <News_View />
-        },
-        {
-            // 관련법령
-            path: 'contents/Laws',
-            element: <Laws />
-        },
-        {
-            // 관련법령_View
-            path: 'contents/Laws/View',
-            element: <Laws_View />
-        },
-        {
-            // 교육자료
-            path: 'contents/Datum',
-            element: <Datum />
-        },
-        {
-            // 교육자료_View
-            path: 'contents/Datum/View',
-            element: <Datum_View />
         }
+        // {
+        //     // 최신뉴스
+        //     path: 'contents/News',
+        //     element: <News />
+        // },
+        // {
+        //     // 최신뉴스_View
+        //     path: 'contents/News/View',
+        //     element: <News_View />
+        // },
+        // {
+        //     // 관련법령
+        //     path: 'contents/Laws',
+        //     element: <Laws />
+        // },
+        // {
+        //     // 관련법령_View
+        //     path: 'contents/Laws/View',
+        //     element: <Laws_View />
+        // },
+        // {
+        //     // 교육자료
+        //     path: 'contents/Datum',
+        //     element: <Datum />
+        // },
+        // {
+        //     // 교육자료_View
+        //     path: 'contents/Datum/View',
+        //     element: <Datum_View />
+        // }
     ]
 };
 

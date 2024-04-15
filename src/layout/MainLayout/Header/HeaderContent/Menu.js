@@ -47,19 +47,23 @@ const Menus = () => {
                     children: [
                         {
                             label: '원장인사',
-                            key: '/contents/Greeting'
+                            key: '/contents/Greeting',
+                            paths: '/contents/Greeting'
                         },
                         {
                             label: '조직도',
-                            key: '/contents/Groups'
+                            key: '/contents/Groups',
+                            paths: '/contents/Groups'
                         },
                         {
                             label: '교육시설',
-                            key: '/contents/Facility'
+                            key: '/contents/Facility',
+                            paths: '/contents/Facility'
                         },
                         {
                             label: '오시는 길',
-                            key: '/contents/Directions'
+                            key: '/contents/Directions',
+                            paths: '/contents/Directions'
                         }
                     ]
                 }
@@ -76,19 +80,23 @@ const Menus = () => {
                     children: [
                         {
                             label: '보안검색 교육과정',
-                            key: '/contents/Security'
+                            key: '/contents/Security',
+                            paths: '/contents/Security'
                         },
                         {
                             label: '항공경비 교육과정',
-                            key: '/contents/Airline'
+                            key: '/contents/Airline',
+                            paths: '/contents/Airline'
                         },
                         {
                             label: '정원 및 운영계획',
-                            key: '/contents/Operate'
+                            key: '/contents/Operate',
+                            paths: '/contents/Operate'
                         },
                         {
                             label: '입교절차',
-                            key: '/contents/Admission'
+                            key: '/contents/Admission',
+                            paths: '/contents/Admission'
                         }
                     ]
                 }
@@ -105,11 +113,13 @@ const Menus = () => {
                     children: [
                         {
                             label: '관련근거',
-                            key: '/contents/Reason'
+                            key: '/contents/Reason',
+                            paths: '/contents/Reason'
                         },
                         {
                             label: '신청방법',
-                            key: '/contents/Application'
+                            key: '/contents/Application',
+                            paths: '/contents/Application'
                         }
                     ]
                 }
@@ -126,15 +136,33 @@ const Menus = () => {
                     children: [
                         {
                             label: '공지사항',
-                            key: '/contents/Notification'
+                            key: '/contents/Notification',
+                            paths: '/contents/Board/Lists',
+                            state: {
+                                board: '게시판',
+                                flag: 'Notice',
+                                title: '공지사항'
+                            }
                         },
                         {
                             label: '교육안내',
-                            key: '/contents/Education'
+                            key: '/contents/Education',
+                            paths: '/contents/Board/Lists',
+                            state: {
+                                board: '게시판',
+                                flag: 'Education',
+                                title: '교육안내'
+                            }
                         },
                         {
                             label: 'FAQ',
-                            key: '/contents/Faq'
+                            key: '/contents/Faq',
+                            paths: '/contents/Board/Lists',
+                            state: {
+                                board: '게시판',
+                                flag: 'Faq',
+                                title: 'FAQ'
+                            }
                         }
                     ]
                 }
@@ -151,19 +179,39 @@ const Menus = () => {
                     children: [
                         {
                             label: '최신뉴스',
-                            key: '/contents/News'
+                            key: '/contents/News',
+                            paths: '/contents/Board/Lists',
+                            state: {
+                                board: '자료실',
+                                flag: 'News',
+                                title: '최신뉴스'
+                            }
                         },
                         {
                             label: '관련법령',
-                            key: '/contents/Laws'
+                            key: '/contents/Laws',
+                            paths: '/contents/Board/Lists',
+                            state: {
+                                board: '자료실',
+                                flag: 'Laws',
+                                title: '관련법령'
+                            }
                         },
                         {
                             label: '교육자료',
-                            key: '/contents/Datum'
+                            key: '/contents/Datum',
+                            paths: '/contents/Board/Lists',
+                            state: {
+                                board: '자료실',
+                                flag: 'Datum',
+                                title: '교육자료'
+                            }
                         },
                         {
                             label: '사진자료',
-                            key: '/contents/Picture'
+                            // key: '/contents/Picture'
+                            key: '/contents/Picture',
+                            paths: '/contents/Picture'
                         }
                     ]
                 }
@@ -180,13 +228,13 @@ const Menus = () => {
     ];
 
     const onClick = (e) => {
-        console.log('click ', e.key);
+        // console.log('click ', e.item.props.paths);
+        // console.log('location ', e.item.props);
         setCurrent(e.key);
-        navigate(e.key);
+        navigate(e.item.props.paths, { state: e.item.props.state });
     };
 
     const itemStyle = { margin: '0px 20px', fontWeight: '600', fontSize: '22px', letterSpacing: '-1px' }; // 스타일 객체 정의
-
     const applyMarginToItems = (items) => {
         return items.map((item) => {
             if (item) {
@@ -200,7 +248,6 @@ const Menus = () => {
     };
 
     const menuItemsWithMargin = applyMarginToItems(items);
-
     return (
         <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Menu
@@ -210,6 +257,13 @@ const Menus = () => {
                 selectedKeys={[current]}
                 mode={matchesXs === false ? 'horizontal' : 'inline'}
                 items={menuItemsWithMargin}
+                location={items.map((m, i) => {
+                    m.key === 'border' || m.key === 'data'
+                        ? m.children[0].children.map((l) => {
+                              l.location;
+                          })
+                        : '';
+                })}
             />
         </Box>
     );

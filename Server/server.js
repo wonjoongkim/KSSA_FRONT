@@ -210,6 +210,7 @@ app.post('/FileDelete', async (req, res) => {
         if (conn) return conn.end();
     }
 });
+
 //#############################################################
 //#####################    Common End    ######################
 //#############################################################
@@ -493,16 +494,64 @@ app.post('/User/Contets_List', async (req, res) => {
 
 //=============================================================
 // Board List Start
+app.post('/User/Board_Main_List', async (req, res) => {
+    const { Board_Type } = req.body;
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const query = "Select Idx, Board_Type, Subject, InDate From NKSSA_Board Where Board_Type = ? And State = '0' LIMIT 5 ";
+        const result = await conn.query(query, [Board_Type]);
+        if (result.length !== 0) {
+            res.json({
+                RET_DATA: result,
+                RET_CODE: '0000'
+            });
+        } else {
+            res.json({
+                RET_DATA: 'No Data',
+                RET_CODE: '0001'
+            });
+        }
+    } catch (err) {
+        console.error('Error executing MariaDB query:', err);
+        res.json({
+            RET_DATA: null,
+            RET_DESC: `조회 실패_${err}`,
+            RET_CODE: '1000'
+        });
+    } finally {
+        if (conn) return conn.end();
+    }
+});
+// Board List End
+//=============================================================
+
+//=============================================================
+// Board List Start
 app.post('/User/Board_List', async (req, res) => {
     const { Board_Type } = req.body;
     let conn;
     try {
         conn = await pool.getConnection();
-        const query = "Select Idx, Board_Type, Subject, Contents, Visited, InDate From NKSSA_Board Where Board_Type = ? And State = '0' ";
-        const result = await conn.query(query, [Board_Type]);
+        const query = `SELECT (
+                SELECT CAST(COUNT(Idx) AS UNSIGNED) 
+                FROM NKSSA_Board 
+                WHERE Board_Type = ?
+            ) AS Total, Idx, Board_Type, Subject, Contents, File_Key, Visited, InDate From NKSSA_Board Where Board_Type = ? And State = '0'`;
+        const result = await conn.query(query, [Board_Type, Board_Type]);
+        const serializedResult = result.map((row) => ({
+            Total: String(row.Total),
+            Idx: row.Idx,
+            Board_Type: row.Board_Type,
+            Subject: row.Subject,
+            Contents: row.Contents,
+            File_Key: row.File_Key,
+            Visited: row.Visited,
+            InDate: row.InDate
+        }));
 
         res.json({
-            RET_DATA: result,
+            RET_DATA: serializedResult,
             RET_CODE: '0000'
         });
     } catch (err) {
@@ -527,7 +576,81 @@ app.post('/User/Board_View', async (req, res) => {
     try {
         conn = await pool.getConnection();
         // 게시물 조회
-        const query = 'Select Board_Type, Subject, Contents, File_Key, Visited, InDate From NKSSA_Board Where Board_Type = ? And Idx = ?';
+        const query = `Select (
+                SELECT CAST(COUNT(Idx) AS UNSIGNED) 
+                FROM NKSSA_Board 
+                WHERE Board_Type = ?
+            ) AS Total, Idx, Board_Type, Subject, Contents, File_Key, Visited, InDate From NKSSA_Board Where Board_Type = ? And Idx = ?`;
+        const result = await conn.query(query, [Board_Type, Board_Type, Idx]);
+        const serializedResult = result.map((row) => ({
+            Total: String(row.Total),
+            Board_Type: row.Board_Type,
+            Subject: row.Subject,
+            Contents: row.Contents,
+            File_Key: row.File_Key,
+            Visited: row.Visited,
+            InDate: row.InDate
+        }));
+
+        // 파일 조회
+        const file_query =
+            'Select File_Key, Original_FileName, Save_FileName, File_Path, File_Ext, File_Size From NKSSA_FileAttach Where File_Key = ?';
+        const file_result = await conn.query(file_query, [serializedResult[0].File_Key]);
+        res.json({
+            RET_DATA: { serializedResult, file_result },
+            RET_CODE: '0000'
+        });
+    } catch (err) {
+        console.error('Error executing MariaDB query:', err);
+        res.json({
+            RET_DATA: null,
+            RET_DESC: `조회 실패_${err}`,
+            RET_CODE: '1000'
+        });
+    } finally {
+        if (conn) return conn.end();
+    }
+});
+// Board View End
+//=============================================================
+
+//=============================================================
+// Picture List Start
+app.post('/User/Picture_List', async (req, res) => {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const query =
+            "Select Idx, Subject, Personnel, Contents, Visited, State, File_Idx, InDate, InId From NKSSA_Picture Where State = '0' ";
+        const result = await conn.query(query, [Board_Type]);
+
+        res.json({
+            RET_DATA: result,
+            RET_CODE: '0000'
+        });
+    } catch (err) {
+        console.error('Error executing MariaDB query:', err);
+        res.json({
+            RET_DATA: null,
+            RET_DESC: `조회 실패_${err}`,
+            RET_CODE: '1000'
+        });
+    } finally {
+        if (conn) return conn.end();
+    }
+});
+// Board List End
+//=============================================================
+
+//=============================================================
+// Picture View Start
+app.post('/User/Picture_View', async (req, res) => {
+    const { Board_Type, Idx } = req.body;
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        // 게시물 조회
+        const query = 'Select Idx, Subject, Personnel, Contents, Visited, State, File_Idx, InDate, InId From NKSSA_Picture Where Idx = ?';
         const result = await conn.query(query, [Board_Type, Idx]);
 
         // 파일 조회

@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useMemberInfoMutation, useBoardMainListMutation } from '../../hooks/api/MainManagement/MainManagement';
+
 import CountUp from 'react-countup';
 import '../../../src/';
 // material-ui
 import { Divider, Card, Col, Row, Statistic, FloatButton, List, Tooltip } from 'antd';
 import { Box, Grid, Typography } from '@mui/material';
-import { HolderOutlined, PushpinOutlined, SoundOutlined, LineOutlined } from '@ant-design/icons';
 
 // project import
 import MainCard from 'components/MainCard';
@@ -17,42 +18,54 @@ import Slick from '../slick/Slick';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export const DashboardDefault = () => {
-    let [stateShow, setStateShow] = useState(false);
-
+    const [MemberInfoApi] = useMemberInfoMutation();
+    const [BoardMainListApi] = useBoardMainListMutation();
+    const [board_DataE, setBoard_DataE] = useState([]);
+    const [board_DataN, setBoard_DataN] = useState([]);
     const formatter = (value) => <CountUp end={value} separator="," />;
 
-    const data = [
-        {
-            title: '항공보안학회 2023년 추계학술대회',
-            date: '2024-01-01'
-        },
+    // 회원정보
+    const handleMemberInfo = async () => {
+        const MemberInfoeResponse = await MemberInfoApi({
+            Idx: viewContainer.id
+        });
+        MemberInfoeResponse?.data?.RET_CODE === '0000' ? '' : '';
+    };
 
-        {
-            title: '항공보안파트너스(주) 채용공고_2023.09.27',
-            date: '2024-01-02'
-        },
-        {
-            title: '인천국제공항보안 보안검색직 직원채용공고_2023.10.20',
-            date: '2024-01-03'
-        },
-        {
-            title: '한국항공보안학회_국제분과위원회 포럼(2023.10.13)',
-            date: '2024-01-04'
-        },
-        {
-            title: '2023년 보안검색장비산업 발전 세미나',
-            date: '2024-01-05'
-        }
-    ];
+    // 교육안내
+    const handleBoardMainList_E = async () => {
+        const BoardMainListEResponse = await BoardMainListApi({
+            Board_Type: 'Education'
+        });
+        BoardMainListEResponse?.data?.RET_CODE === '0000'
+            ? setBoard_DataE(
+                  BoardMainListEResponse?.data?.RET_DATA.map((d) => ({
+                      title: d.Subject,
+                      date: d.InDate.substring(0, 10).replace(/-/g, '.')
+                  }))
+              )
+            : setBoard_DataE('');
+    };
+
+    // 공지사항
+    const handleBoardMainList_N = async () => {
+        const BoardMainListNResponse = await BoardMainListApi({
+            Board_Type: 'Notice'
+        });
+        BoardMainListNResponse?.data?.RET_CODE === '0000'
+            ? setBoard_DataN(
+                  BoardMainListNResponse?.data?.RET_DATA.map((d) => ({
+                      title: d.Subject,
+                      date: d.InDate.substring(0, 10).replace(/-/g, '.')
+                  }))
+              )
+            : setBoard_DataN('');
+    };
 
     useEffect(() => {
-        let timer = setTimeout(() => {
-            setStateShow(true);
-        }, 300);
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [stateShow]);
+        handleBoardMainList_E();
+        handleBoardMainList_N();
+    }, []);
 
     return (
         <>
@@ -92,6 +105,8 @@ export const DashboardDefault = () => {
                 </Col>
             </Row>
             <Divider />
+
+            {/* 교육 스케쥴 Start */}
             <Grid container>
                 <Grid item xs={12} mb={5} lg={12}>
                     {/* <Grid container alignItems="center" justifyContent="space-between">
@@ -106,8 +121,9 @@ export const DashboardDefault = () => {
                     </MainCard>
                 </Grid>
             </Grid>
+            {/* 교육 스케쥴 End */}
 
-            {/* 제휴, 협력 로고 */}
+            {/* 제휴, 협력 로고 Start */}
             <Grid container>
                 <Grid item xs={12} mb={7} lg={12}>
                     <MainCard content={false}>
@@ -117,8 +133,9 @@ export const DashboardDefault = () => {
                     </MainCard>
                 </Grid>
             </Grid>
+            {/* 제휴, 협력 로고 End */}
 
-            {/* 교육안내, 공지사항 */}
+            {/* 교육안내, 공지사항 Start */}
             <Row gutter={[48, 16]}>
                 <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                     <Card
@@ -131,8 +148,12 @@ export const DashboardDefault = () => {
                             </div>
                         }
                         extra={
-                            <Link to="contents/Education" style={{ fontWeight: '700' }}>
-                                <Tooltip title="More" color={'#108ee9'} key={'#108ee9'}>
+                            <Link
+                                to="contents/Board/Lists"
+                                state={{ board: '게시판', flag: 'Education', title: '교육안내' }}
+                                style={{ fontWeight: '700' }}
+                            >
+                                <Tooltip title="더보기" color={'#108ee9'} key={'#108ee9'}>
                                     More
                                 </Tooltip>
                             </Link>
@@ -142,7 +163,7 @@ export const DashboardDefault = () => {
                         <List
                             size="large"
                             bordered
-                            dataSource={data}
+                            dataSource={board_DataE}
                             renderItem={(item) => (
                                 <List.Item style={{ fontSize: '18px', fontWeight: '600' }}>
                                     <List.Item.Meta
@@ -169,8 +190,12 @@ export const DashboardDefault = () => {
                             </div>
                         }
                         extra={
-                            <Link to="contents/Notification" style={{ fontWeight: '700' }}>
-                                <Tooltip title="More" color={'#108ee9'} key={'#108ee9'}>
+                            <Link
+                                to="contents/Board/Lists"
+                                state={{ board: '게시판', flag: 'Notice', title: '공지사항' }}
+                                style={{ fontWeight: '700' }}
+                            >
+                                <Tooltip title="더보기" color={'#108ee9'} key={'#108ee9'}>
                                     More
                                 </Tooltip>
                             </Link>
@@ -180,7 +205,7 @@ export const DashboardDefault = () => {
                         <List
                             size="large"
                             bordered
-                            dataSource={data}
+                            dataSource={board_DataN}
                             renderItem={(item) => (
                                 <List.Item style={{ fontSize: '18px', fontWeight: '600' }}>
                                     <List.Item.Meta
@@ -197,6 +222,8 @@ export const DashboardDefault = () => {
                     </Card>
                 </Col>
             </Row>
+            {/* 교육안내, 공지사항 End */}
+
             <FloatButton.BackTop />
         </>
     );

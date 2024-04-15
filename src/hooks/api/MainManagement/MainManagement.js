@@ -16,25 +16,17 @@ export const mainManagement = createApi({
     }),
     endpoints: (builder) => ({
         // 로그인 정보
-        getLoginInfo: builder.mutation({
+        MemberInfo: builder.mutation({
             query: (body) => ({
-                url: 'user/getLoginInfo',
+                url: 'User/Member_Info',
                 method: 'POST',
                 body: body
             })
         }),
-        // 통계 - 교육상황
-        selectMainEduStatistics: builder.mutation({
+        // 메인 - 교육안내, 공지사항
+        BoardMainList: builder.mutation({
             query: (body) => ({
-                url: 'adm/statistics/selectMainEduStatistics.do',
-                method: 'POST',
-                body: body
-            })
-        }),
-        // 통계 - 연도별합격별
-        selectMainYearStatistics: builder.mutation({
-            query: (body) => ({
-                url: 'adm/statistics/selectMainYearStatistics.do',
+                url: 'User/Board_Main_List',
                 method: 'POST',
                 body: body
             })
@@ -42,4 +34,4 @@ export const mainManagement = createApi({
     })
 });
 
-export const { useGetLoginInfoMutation, useSelectMainEduStatisticsMutation, useSelectMainYearStatisticsMutation } = mainManagement;
+export const { useMemberInfoMutation, useBoardMainListMutation } = mainManagement;
