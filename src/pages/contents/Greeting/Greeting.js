@@ -8,8 +8,8 @@ import MainCard from 'components/MainCard';
 // import { useContentsListMutation } from '../../../hooks/api/ContentsManagement/ContentsManagement';
 import './Greeting_Style.css';
 
-const { Title, Paragraph, Text, Link } = Typography;
-const { Sider, Content } = Layout;
+const { Title, Paragraph } = Typography;
+const { Content } = Layout;
 
 export const Greeting = () => {
     const { Meta } = Card;
