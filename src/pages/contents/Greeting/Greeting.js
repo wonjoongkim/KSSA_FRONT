@@ -5,7 +5,7 @@ import { HomeOutlined } from '@ant-design/icons';
 
 import greetings from '../../../assets/images/greetings.jpg';
 import MainCard from 'components/MainCard';
-
+// import { useContentsListMutation } from '../../../hooks/api/ContentsManagement/ContentsManagement';
 import './Greeting_Style.css';
 
 const { Title, Paragraph, Text, Link } = Typography;
@@ -15,7 +15,25 @@ export const Greeting = () => {
     const { Meta } = Card;
     const [loading, setLoading] = useState(true); // 로딩 초기값
     const [isMobileView, setIsMobileView] = useState(false);
+    // const [contents_Container, setContents_Container] = useState('');
+
+    // 교육안내
+    // const [ContentsListApi] = useContentsListMutation();
+    // const handleContentsList = async (flag) => {
+    //     const ContentsListResponse = await ContentsListApi({
+    //         Contents_Type: 'Greeting'
+    //     });
+    //     if (ContentsListResponse?.data?.RET_CODE === '0000') {
+    //         setContents_Container(ContentsListResponse?.data?.RET_DATA[0].Contents);
+    //         setLoading(false);
+    //     } else {
+    //         setContents_Container('');
+    //     }
+    // };
+
     useEffect(() => {
+        // setLoading(true);
+        // handleContentsList();
         const timerId = setTimeout(() => {
             setLoading(false);
         }, 300);
@@ -58,6 +76,7 @@ export const Greeting = () => {
                                         }
                                         style={{ marginBottom: '80px', textAlign: 'center' }}
                                     />
+                                    {/* <div dangerouslySetInnerHTML={{ __html: contents_Container }} /> */}
                                     <Row gutter={[24, 24]}>
                                         <Col xs={{ span: 24, order: 2 }} sm={{ span: 8, order: isMobileView ? 2 : 3 }}>
                                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -116,13 +135,6 @@ export const Greeting = () => {
                                                 </Typography>
                                             </div>
                                         </Col>
-                                        {/* <Col xs={{ span: 24, order: 3 }} sm={{ span: 8, order: isMobileView ? 1 : 4 }}>
-                                    <Paragraph
-                                        style={{ letterSpacing: '2px', display: 'flex', justifyContent: 'right', alignItems: 'right' }}
-                                    >
-                                        <Title level={4}>한국보안인재개발원장 서일수</Title>
-                                    </Paragraph>
-                                </Col> */}
                                     </Row>
                                 </Card>
                             </Spin>

@@ -475,7 +475,7 @@ app.post('/User/Contets_List', async (req, res) => {
         const result = await conn.query(query, [Contents_Type]);
 
         res.json({
-            RET_DATA: { result },
+            RET_DATA: result,
             RET_CODE: '0000'
         });
     } catch (err) {

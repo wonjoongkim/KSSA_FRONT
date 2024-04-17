@@ -168,7 +168,12 @@ export const Facility = () => {
                                             <SnippetsOutlined style={{ fontSize: '18px', paddingRight: '5px' }} /> 교육장 배치도
                                         </Title>
                                         <div className="image-container">
-                                            <img className="responsive-image_one" src={GroupsImg} alt="Responsive Image" />
+                                            <img
+                                                className="responsive-image_one"
+                                                src={GroupsImg}
+                                                alt="Responsive Image"
+                                                style={{ width: innerWidth - 800 }}
+                                            />
                                         </div>
                                     </Card>
                                 </Col>
@@ -199,7 +204,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g1} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g1}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col
@@ -220,7 +230,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g2} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g2}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col
@@ -241,7 +256,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g3} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g3}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col
@@ -266,7 +286,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g4} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g4}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col
@@ -287,7 +312,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g5} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g5}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             {/* <Col
@@ -329,7 +359,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g7} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g7}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col
@@ -350,7 +385,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g8} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g8}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col
@@ -371,7 +411,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g9} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g9}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                             <Col
@@ -392,7 +437,12 @@ export const Facility = () => {
                                                         padding: '8px'
                                                     }}
                                                 >
-                                                    <img className="responsive-image" src={g10} alt="Responsive Image" />
+                                                    <img
+                                                        className="responsive-image"
+                                                        src={g10}
+                                                        alt="Responsive Image"
+                                                        style={{ display: 'grid' }}
+                                                    />
                                                 </div>
                                             </Col>
                                         </Row>
