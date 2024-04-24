@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useMemberInfoMutation } from '../../../hooks/api/MainManagement/MainManagement';
+import { useXbtUserInfoMutation } from '../../../hooks/api/XbtCrossManagement/XbtCrossManagement';
+
 import { Card, Row, Col, Input, Button, Space, Divider, Table, Modal } from 'antd';
 import {
     SearchOutlined,
@@ -13,13 +16,72 @@ import { Evaluation } from './Evaluation';
 import './Style.css';
 
 export const MyPage_User = () => {
-    // console.log(localStorage.getItem('Disivion'));
     const Disivion = localStorage.getItem('Disivion');
+
     const { Meta } = Card;
     const [loading, setLoading] = useState(false);
     const [address_disabled, setAddress_disabled] = useState(true);
     const [openModal, setOpenModal] = useState(false);
+    const [userInfoData, setUserInfoData] = useState(null);
     const [dataSource, setDataSource] = useState();
+    const [xbtChk, setXbtChk] = useState(null);
+    const [itemContainer, setItemContainer] = useState(null);
+
+    const DataOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+    const [MemberInfoApi] = useMemberInfoMutation();
+    const handelMemberInfo = async () => {
+        const MemberInfoResponse = await MemberInfoApi({});
+        if (MemberInfoResponse?.data?.RET_CODE === '0000') {
+            setUserInfoData({
+                ...userInfoData,
+                User_Id: MemberInfoResponse?.data?.RET_DATA?.User_Id,
+                User_Nm: MemberInfoResponse?.data?.RET_DATA?.User_Nm,
+                User_Email: MemberInfoResponse?.data?.RET_DATA?.User_Email,
+                User_Zip: MemberInfoResponse?.data?.RET_DATA?.User_Zip,
+                User_Address: MemberInfoResponse?.data?.RET_DATA?.User_Address,
+                User_Address_Detail: MemberInfoResponse?.data?.RET_DATA?.User_Address_Detail,
+                User_Phone: MemberInfoResponse?.data?.RET_DATA?.User_Phone,
+                Date: new Date(MemberInfoResponse?.data?.RET_DATA?.InDate).toLocaleTimeString('ko-KR', DataOptions).substring(0, 12)
+            });
+            handelXBTInclude(MemberInfoResponse?.data?.RET_DATA?.Edu_Nm, MemberInfoResponse?.data?.RET_DATA?.Edu_Id);
+        } else {
+            ('');
+        }
+    };
+
+    // ============================================
+    // XBT 연동 Start
+    const [XbtIncludeApi] = useXbtUserInfoMutation();
+    const handelXBTInclude = async (Edu_Nm, Edu_Id) => {
+        const XbtIncludeResponse = await XbtIncludeApi({
+            Edu_Nm: Edu_Nm,
+            Edu_Id: Edu_Id
+        });
+        if (XbtIncludeResponse?.data?.RET_CODE === '0000') {
+            setXbtChk(true);
+            setItemContainer({
+                ...itemContainer,
+                User_Nm: XbtIncludeResponse?.data?.RET_DATA[0].User_Nm,
+                Company_Nm: XbtIncludeResponse?.data?.RET_DATA[0].Company,
+                User_Phone: XbtIncludeResponse?.data?.RET_DATA[0].Hp_No,
+                User_Email: XbtIncludeResponse?.data?.RET_DATA[0].Email,
+                Edu_No: XbtIncludeResponse?.data?.RET_DATA[0].User_No,
+                Edu_Code: XbtIncludeResponse?.data?.RET_DATA[0].Edu_Code,
+                Edu_Code_Nm: XbtIncludeResponse?.data?.RET_DATA[0].Edu_Name
+            });
+        } else {
+            Modal.error({
+                content: XbtIncludeResponse?.data?.RET_DESC,
+                style: { top: 320 },
+                onOk() {}
+            });
+        }
+        return;
+    };
+    // XBT 연동 End
+    // ============================================
+
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
@@ -143,7 +205,9 @@ export const MyPage_User = () => {
         setOpenModal(false);
     };
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        handelMemberInfo();
+    }, []);
 
     return (
         <>
@@ -168,13 +232,39 @@ export const MyPage_User = () => {
                                     xl={22}
                                     style={{ display: 'flex', justifyContent: 'start', alignItems: 'center', fontSize: '16px' }}
                                 >
-                                    2024-01-09
+                                    {userInfoData?.Date}
                                 </Col>
                                 <Col xs={8} xl={2} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
                                     아이디
                                 </Col>
                                 <Col xs={16} xl={22} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
-                                    testers
+                                    {userInfoData?.User_Id}
+                                </Col>
+                                <Col xs={8} xl={2} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                                    이메일
+                                </Col>
+                                <Col xs={16} xl={22} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                                    {userInfoData?.User_Email}
+                                </Col>
+                                <Col xs={8} xl={2} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                                    주소
+                                </Col>
+                                <Col xs={16} xl={22} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                                    {userInfoData?.User_Zip !== '' || userInfoData?.User_Zip !== undefined
+                                        ? `[${userInfoData?.User_Zip}]`
+                                        : ''}{' '}
+                                    {userInfoData?.User_Address !== '' || userInfoData?.User_Address !== undefined
+                                        ? userInfoData?.User_Address
+                                        : ''}{' '}
+                                    {userInfoData?.User_Address_Detail !== '' || userInfoData?.User_Address_Detail !== undefined
+                                        ? userInfoData?.User_Address_Detail
+                                        : ''}
+                                </Col>
+                                <Col xs={8} xl={2} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                                    연락처
+                                </Col>
+                                <Col xs={16} xl={22} style={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}>
+                                    {userInfoData?.User_Phone}
                                 </Col>
                             </Row>
                         </Card>

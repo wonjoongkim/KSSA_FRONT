@@ -381,18 +381,26 @@ app.post('/User/Member_Login', async (req, res) => {
 //=============================================================
 // 로그인한 회원 정보 Start
 app.post('/User/Member_Info', verifyBearerToken, async (req, res) => {
-    const UserId = req.user.userid;
-    const UserNm = req.user.username;
+    const { User_Id, User_Nm } = req.user;
     let conn;
     try {
         conn = await pool.getConnection();
-        const query = 'Select User_Id, User_Nm From NKSSA_Members Where User_Id = ? And User_Nm = ? ';
-        const result = await conn.query(query, [UserId, UserNm]);
+        const query =
+            'Select User_Id, User_Nm, User_Phone, User_Email, User_Zip, User_Address, User_Address_Detail, Edu_Id, Edu_Nm, InDate From NKSSA_Members Where User_Id = ? And User_Nm = ? ';
+        const result = await conn.query(query, [User_Id, User_Nm]);
 
         res.json({
             RET_DATA: {
                 User_Id: result[0].User_Id,
-                User_Nm: result[0].User_Nm
+                User_Nm: result[0].User_Nm,
+                User_Phone: result[0].User_Phone,
+                User_Email: result[0].User_Email,
+                User_Zip: result[0].User_Zip,
+                User_Address: result[0].User_Address,
+                User_Address_Detail: result[0].User_Address_Detail,
+                Edu_Id: result[0].Edu_Id,
+                Edu_Nm: result[0].Edu_Nm,
+                InDate: result[0].InDate
             },
             RET_CODE: '0000'
         });

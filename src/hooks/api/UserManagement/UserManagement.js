@@ -19,7 +19,7 @@ export const userManagement = createApi({
     endpoints: (builder) => ({
         userView: builder.mutation({
             query: (body) => ({
-                url: 'adm/users/view',
+                url: 'User/User_Info',
                 method: 'POST',
                 body: body
             })
