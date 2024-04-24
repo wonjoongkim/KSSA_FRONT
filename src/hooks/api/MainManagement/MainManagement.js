@@ -23,10 +23,18 @@ export const mainManagement = createApi({
                 body: body
             })
         }),
-        // 메인 - 교육안내, 공지사항
+        // 메인 - 교육안내, 공지사항 List
         BoardMainList: builder.mutation({
             query: (body) => ({
                 url: 'User/Board_Main_List',
+                method: 'POST',
+                body: body
+            })
+        }),
+        // 메인 - 교육안내, 공지사항 View
+        BoardMainView: builder.mutation({
+            query: (body) => ({
+                url: 'User/Board_Main_View',
                 method: 'POST',
                 body: body
             })
@@ -34,4 +42,4 @@ export const mainManagement = createApi({
     })
 });
 
-export const { useMemberInfoMutation, useBoardMainListMutation } = mainManagement;
+export const { useMemberInfoMutation, useBoardMainListMutation, useBoardMainViewMutation } = mainManagement;

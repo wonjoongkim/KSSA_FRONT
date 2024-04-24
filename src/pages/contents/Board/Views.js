@@ -119,7 +119,7 @@ export const Views = () => {
                 <Spin tip="Loading..." spinning={loading}>
                     <Row
                         style={{
-                            border: '2px solid #aaaaaa',
+                            border: '2px solid #ebe9e9',
                             borderRadius: '12px',
                             marginTop: '20px',
                             height: '90px'
@@ -157,13 +157,13 @@ export const Views = () => {
                         </Col>
                     </Row>
                     <Row
+                        gutter={[0, 10]}
                         style={{
-                            border: '2px solid #aaaaaa',
+                            border: '2px solid #ebe9e9',
                             borderRadius: '12px',
                             display: 'flex',
                             alignItems: 'center',
-                            padding: '0 20px',
-                            height: '90px'
+                            padding: '10px 20px'
                         }}
                     >
                         {board_FileData?.map((d, i) => (

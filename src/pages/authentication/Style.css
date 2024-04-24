@@ -56,3 +56,7 @@
         display: none;
     }
 }
+
+:where(.css-dev-only-do-not-override-190m0jy).ant-input-number-lg input.ant-input-number-input {
+    height: 50px;
+}

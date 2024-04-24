@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { useMemberInfoMutation, useBoardMainListMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { Divider, Card, Col, Row, Statistic, FloatButton, List, Tooltip, Modal, Button, Space, Spin } from 'antd';
+import { useMemberInfoMutation, useBoardMainListMutation, useBoardMainViewMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { FileDoneOutlined, DownloadOutlined, EyeOutlined } from '@ant-design/icons';
 
 import CountUp from 'react-countup';
 import '../../../src/';
 // material-ui
-import { Divider, Card, Col, Row, Statistic, FloatButton, List, Tooltip } from 'antd';
 import { Box, Grid, Typography } from '@mui/material';
 
 // project import
@@ -18,11 +19,19 @@ import Slick from '../slick/Slick';
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
 export const DashboardDefault = () => {
+    const [loading, setLoading] = useState(false); // 로딩 초기값
     const [MemberInfoApi] = useMemberInfoMutation();
     const [BoardMainListApi] = useBoardMainListMutation();
+    const [BoardMainViewApi] = useBoardMainViewMutation();
     const [board_DataE, setBoard_DataE] = useState([]);
     const [board_DataN, setBoard_DataN] = useState([]);
+    const [board_DataV, setBoard_DataV] = useState([]);
+    const [board_FileData, setBoard_FileData] = useState([]);
+
+    const [modal_Board, setModal_Board] = useState(false);
     const formatter = (value) => <CountUp end={value} separator="," />;
+
+    const DataOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
     // 회원정보
     const handleMemberInfo = async () => {
@@ -32,7 +41,7 @@ export const DashboardDefault = () => {
         MemberInfoeResponse?.data?.RET_CODE === '0000' ? '' : '';
     };
 
-    // 교육안내
+    // 교육안내 List
     const handleBoardMainList_E = async () => {
         const BoardMainListEResponse = await BoardMainListApi({
             Board_Type: 'Education'
@@ -40,6 +49,7 @@ export const DashboardDefault = () => {
         BoardMainListEResponse?.data?.RET_CODE === '0000'
             ? setBoard_DataE(
                   BoardMainListEResponse?.data?.RET_DATA.map((d) => ({
+                      Idx: d.Idx,
                       title: d.Subject,
                       date: d.InDate.substring(0, 10).replace(/-/g, '.')
                   }))
@@ -47,7 +57,7 @@ export const DashboardDefault = () => {
             : setBoard_DataE('');
     };
 
-    // 공지사항
+    // 공지사항 List
     const handleBoardMainList_N = async () => {
         const BoardMainListNResponse = await BoardMainListApi({
             Board_Type: 'Notice'
@@ -55,11 +65,38 @@ export const DashboardDefault = () => {
         BoardMainListNResponse?.data?.RET_CODE === '0000'
             ? setBoard_DataN(
                   BoardMainListNResponse?.data?.RET_DATA.map((d) => ({
+                      Idx: d.Idx,
                       title: d.Subject,
                       date: d.InDate.substring(0, 10).replace(/-/g, '.')
                   }))
               )
             : setBoard_DataN('');
+    };
+
+    // 교육안내, 공지사항 View
+    const handelBoardMainView = async (type, idx) => {
+        setModal_Board(true);
+        const BoardMainViewResponse = await BoardMainViewApi({
+            Board_Type: type,
+            Idx: idx
+        });
+        if (BoardMainViewResponse?.data?.RET_CODE === '0000') {
+            setBoard_DataV({
+                Total: BoardMainViewResponse?.data?.RET_DATA?.serializedResult[0].Total,
+                Subject: BoardMainViewResponse?.data?.RET_DATA?.serializedResult[0].Subject,
+                Contents: BoardMainViewResponse?.data?.RET_DATA?.serializedResult[0].Contents,
+                InDate: BoardMainViewResponse?.data?.RET_DATA?.serializedResult[0].InDate.substring(0, 10).replace(/-/g, '.')
+            });
+            setBoard_FileData(BoardMainViewResponse?.data?.RET_DATA?.file_result);
+        } else {
+            setBoard_DataV('');
+        }
+
+        setLoading(false);
+    };
+    // 닫기
+    const Modal_Boards = () => {
+        setModal_Board((prev) => !prev);
     };
 
     useEffect(() => {
@@ -168,9 +205,13 @@ export const DashboardDefault = () => {
                                 <List.Item style={{ fontSize: '18px', fontWeight: '600' }}>
                                     <List.Item.Meta
                                         title={
-                                            <a href="#" style={{ fontSize: '18px', fontWeight: '600' }}>
+                                            <Button
+                                                type="text"
+                                                onClick={() => handelBoardMainView('Education', item.Idx)}
+                                                style={{ fontSize: '18px', fontWeight: '600' }}
+                                            >
                                                 {item.title}
-                                            </a>
+                                            </Button>
                                         }
                                     />
                                     <div style={{ width: '110px', textAlign: 'right' }}>{item.date}</div>
@@ -210,9 +251,13 @@ export const DashboardDefault = () => {
                                 <List.Item style={{ fontSize: '18px', fontWeight: '600' }}>
                                     <List.Item.Meta
                                         title={
-                                            <a href="#" style={{ fontSize: '18px', fontWeight: '600' }}>
+                                            <Button
+                                                type="text"
+                                                onClick={() => handelBoardMainView('Notice', item.Idx)}
+                                                style={{ fontSize: '18px', fontWeight: '600' }}
+                                            >
                                                 {item.title}
-                                            </a>
+                                            </Button>
                                         }
                                     />
                                     <div style={{ width: '110px', textAlign: 'right' }}>{item.date}</div>
@@ -223,8 +268,124 @@ export const DashboardDefault = () => {
                 </Col>
             </Row>
             {/* 교육안내, 공지사항 End */}
-
             <FloatButton.BackTop />
+            {modal_Board && (
+                <Modal
+                    visible={true}
+                    maskClosable={false}
+                    onOk={Modal_Boards}
+                    closable={false}
+                    width={567}
+                    style={{
+                        zIndex: 999
+                    }}
+                    footer={[]}
+                >
+                    <Spin tip="Loading..." spinning={loading}>
+                        <Row
+                            style={{
+                                border: '2px solid #ebe9e9',
+                                borderRadius: '12px',
+                                marginTop: '20px',
+                                height: '90px'
+                            }}
+                        >
+                            <Col
+                                span={24}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    textAlign: 'center',
+                                    fontSize: '21px',
+                                    fontWeight: '600'
+                                }}
+                            >
+                                {board_DataV?.Subject}
+                            </Col>
+                            <Col
+                                span={24}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    textAlign: 'center',
+                                    fontSize: '15px'
+                                }}
+                            >
+                                {new Date(board_DataV?.InDate).toLocaleTimeString('ko-KR', DataOptions)}
+                            </Col>
+                        </Row>
+                        <Row style={{ padding: '20px 0px' }}>
+                            <Col>
+                                <div dangerouslySetInnerHTML={{ __html: board_DataV?.Contents }} />
+                            </Col>
+                        </Row>
+                        <Row
+                            gutter={[0, 10]}
+                            style={{
+                                border: '2px solid #ebe9e9',
+                                borderRadius: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '10px 20px'
+                            }}
+                        >
+                            {board_FileData?.map((d, i) => (
+                                <>
+                                    <Col xs={11} lg={16} style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
+                                        <a href="#">
+                                            <FileDoneOutlined /> {d.Original_FileName}
+                                        </a>
+                                    </Col>
+                                    <Col xs={13} lg={8} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                        <Space>
+                                            <Tooltip
+                                                title={<span style={{ fontSize: '13px' }}>다운로드</span>}
+                                                color={'#f50'}
+                                                placement="top"
+                                            >
+                                                <Button
+                                                    type="default"
+                                                    icon={<DownloadOutlined />}
+                                                    style={{
+                                                        height: '30px',
+                                                        width: '45px',
+                                                        backgroundColor: '#efefef',
+                                                        fontSize: '13px'
+                                                    }}
+                                                ></Button>
+                                            </Tooltip>
+                                            <Tooltip
+                                                title={<span style={{ fontSize: '13px' }}>미리보기</span>}
+                                                color={'#108ee9'}
+                                                placement="top"
+                                            >
+                                                <Button
+                                                    type="default"
+                                                    icon={<EyeOutlined />}
+                                                    style={{
+                                                        height: '30px',
+                                                        width: '45px',
+                                                        backgroundColor: '#efefef',
+                                                        fontSize: '13px'
+                                                    }}
+                                                ></Button>
+                                            </Tooltip>
+                                        </Space>
+                                    </Col>
+                                </>
+                            ))}
+                        </Row>
+                    </Spin>
+                    <Divider />
+                    <Space style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Button type="primary" onClick={Modal_Boards} style={{ width: '120px', height: '50px', fontWeight: '600' }}>
+                            취소
+                        </Button>
+                    </Space>
+                </Modal>
+            )}
         </>
     );
 };

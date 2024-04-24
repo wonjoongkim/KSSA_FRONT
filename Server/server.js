@@ -38,6 +38,17 @@ const pool = mariadb.createPool({
 // MariaDB 정보 설정 End
 //=============================================================
 
+//=============================================================
+// MariaDB 정보 설정 Start
+const XBTpool = mariadb.createPool({
+    host: process.env.XBT_DB_HOST,
+    user: process.env.XBT_DB_USER,
+    password: process.env.XBT_DB_PASSWORD,
+    database: process.env.XBT_DB_DATABASE
+});
+// MariaDB 정보 설정 End
+//=============================================================
+
 // Helper function for replacer
 const replacer = (key, value) => (typeof value === 'bigint' ? value.toString() : value);
 
@@ -216,8 +227,83 @@ app.post('/FileDelete', async (req, res) => {
 //#############################################################
 
 //#############################################################
+//##################    XBT Include Start   ###################
+//#############################################################
+
+//=============================================================
+// XBT 연동 회원정보 가져오기 Start
+app.post('/XBT/User_Info', async (req, res) => {
+    const { Edu_Id, Edu_Nm } = req.body;
+    let conn;
+    try {
+        conn = await XBTpool.getConnection();
+        const query = `Select CAST(User_No AS CHAR) AS User_No, User_Id, User_Nm, Edu_Code, Edu_Name, Company, Hp_No, Email FROM XBT_STU_USER Where User_Id = ? And User_Nm = ? `;
+        const result = await conn.query(query, [Edu_Id, Edu_Nm]);
+        res.json({
+            RET_DATA: result,
+            RET_DESC: `연동 성공`,
+            RET_CODE: '0000'
+        });
+    } catch (err) {
+        console.error('Error executing MariaDB query:', err);
+        res.json({
+            RET_DATA: null,
+            RET_DESC: `XBT 연동 실패_${err}`,
+            RET_CODE: '1000'
+        });
+    } finally {
+        if (conn) await conn.end();
+    }
+});
+// XBT 연동 회원정보 가져오기 End
+//=============================================================
+
+//#############################################################
+//###################    XBT Include End   ####################
+//#############################################################
+
+//#############################################################
 //#####################    USER Start   #######################
 //#############################################################
+
+//=============================================================
+// 회원가입시 아이디 중복 체크 Start
+app.post('/User/DupliChk', async (req, res) => {
+    const user_id = req.body.user_id;
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const query = `Select User_Id FROM NKSSA_Members Where User_Id = ?`;
+        const rows = await conn.query(query, [user_id]);
+
+        // 사용자가 존재하지 않는 경우
+        if (rows.length === 0) {
+            res.json({
+                RET_DATA: rows.User_Id,
+                RET_DESC: '사용가능',
+                RET_CODE: '0000'
+            });
+        } else {
+            res.json({
+                RET_DATA: null,
+                RET_DESC: '입력하신 아이디는 가입되어 있습니다.',
+                RET_CODE: '1000'
+            });
+        }
+    } catch (err) {
+        console.error('Error executing MariaDB query:', err);
+        res.json({
+            RET_DATA: null,
+            RET_DESC: `중복 체크 실패_${err}`,
+            RET_CODE: '1000'
+        });
+    } finally {
+        if (conn) await conn.end();
+    }
+});
+
+// 회원가입시 아이디 중복 체크 End
+//=============================================================
 
 //=============================================================
 // 로그인 완료시 토큰 발행 Start
@@ -345,18 +431,21 @@ app.post('/User/Member_Insert', async (req, res) => {
         Company_Address_Detail,
         Manager_Nm,
         Manager_Phone,
-        Manager_Email
+        Manager_Email,
+        Edu_No,
+        Edu_Code,
+        Edu_Code_Nm
     } = req.body;
-    const hashedPassword = await hashPassword(req.body.User_Pw); // 비밀번호 해시 생성
+    const hashedPassword = await hashPassword(User_Pw); // 비밀번호 해시 생성
     let conn;
     try {
         conn = await pool.getConnection();
         const query =
             'Insert Into NKSSA_Members (User_Id, User_Pw, User_Type, Edu_Nm, Edu_Id, User_Nm, User_Phone, User_Email, User_Zip ' +
             ', User_Address, User_Address_Detail, Company_Nm, Company_Zip, Company_Address, Company_Address_Detail, Manager_Nm ' +
-            ', Manager_Phone, Manager_Email) ' +
+            ', Manager_Phone, Manager_Email, Edu_No, Edu_Code, Edu_Code_Nm) ' +
             'Values ' +
-            '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const result = await conn.query(query, [
             User_Id,
             hashedPassword,
@@ -375,7 +464,10 @@ app.post('/User/Member_Insert', async (req, res) => {
             Company_Address_Detail,
             Manager_Nm,
             Manager_Phone,
-            Manager_Email
+            Manager_Email,
+            Edu_No,
+            Edu_Code,
+            Edu_Code_Nm
         ]);
         res.json({
             RET_DATA: null,
@@ -493,7 +585,7 @@ app.post('/User/Contets_List', async (req, res) => {
 //=============================================================
 
 //=============================================================
-// Board List Start
+// Board Main List Start
 app.post('/User/Board_Main_List', async (req, res) => {
     const { Board_Type } = req.body;
     let conn;
@@ -523,7 +615,53 @@ app.post('/User/Board_Main_List', async (req, res) => {
         if (conn) return conn.end();
     }
 });
-// Board List End
+// Board Main List End
+//=============================================================
+
+//=============================================================
+// Board Main View Start
+app.post('/User/Board_Main_View', async (req, res) => {
+    const { Board_Type, Idx } = req.body;
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        // 게시물 조회
+        const query = `Select (
+                SELECT CAST(COUNT(Idx) AS UNSIGNED) 
+                FROM NKSSA_Board 
+                WHERE Board_Type = ?
+            ) AS Total, Idx, Board_Type, Subject, Contents, File_Key, Visited, InDate From NKSSA_Board Where Board_Type = ? And Idx = ?`;
+        const result = await conn.query(query, [Board_Type, Board_Type, Idx]);
+        const serializedResult = result.map((row) => ({
+            Total: String(row.Total),
+            Board_Type: row.Board_Type,
+            Subject: row.Subject,
+            Contents: row.Contents,
+            File_Key: row.File_Key,
+            Visited: row.Visited,
+            InDate: row.InDate
+        }));
+
+        // 파일 조회
+        const file_query =
+            'Select File_Key, Original_FileName, Save_FileName, File_Path, File_Ext, File_Size From NKSSA_FileAttach Where File_Key = ?';
+        const file_result = await conn.query(file_query, [serializedResult[0].File_Key]);
+        res.json({
+            RET_DATA: { serializedResult, file_result },
+            RET_CODE: '0000'
+        });
+    } catch (err) {
+        console.error('Error executing MariaDB query:', err);
+        res.json({
+            RET_DATA: null,
+            RET_DESC: `조회 실패_${err}`,
+            RET_CODE: '1000'
+        });
+    } finally {
+        if (conn) return conn.end();
+    }
+});
+// Board Main View End
 //=============================================================
 
 //=============================================================

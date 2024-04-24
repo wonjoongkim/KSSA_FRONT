@@ -7,8 +7,6 @@ import { SmileOutlined, SolutionOutlined, CheckCircleFilled, FormOutlined } from
 import { Register_Team } from './Register_Team'; // 업체 회원가입 폼
 import { Register_User } from './Register_User'; // 교육생 회원가입 폼
 
-import Login_Modal from '../../layout/MainLayout/Header/HeaderContent/Profile'; // 로그인 모달창
-
 export const Register_Step = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -261,9 +259,15 @@ export const Register_Step = () => {
                                 전체동의
                             </Checkbox>
                         )}
-                        {current < 1 && (
-                            <>
-                                <Space>
+
+                        <Space>
+                            {current < 2 && (
+                                <Button onClick={() => prev()} style={{ width: '120px', height: '50px', fontWeight: '600' }}>
+                                    이전단계
+                                </Button>
+                            )}
+                            {current < 1 && (
+                                <>
                                     <Button
                                         type="primary"
                                         onClick={() => next()}
@@ -271,19 +275,20 @@ export const Register_Step = () => {
                                     >
                                         다음단계
                                     </Button>
-                                    <Button
-                                        type="primary"
-                                        onClick={() => Cancel()}
-                                        style={{ width: '120px', height: '50px', fontWeight: '600', backgroundColor: 'orange' }}
-                                    >
-                                        취소
-                                    </Button>
-                                </Space>
-                            </>
-                        )}
-                        {current < 2 && (
-                            <Button onClick={() => prev()} style={{ width: '120px', height: '50px', fontWeight: '600' }}>
-                                이전단계
+                                </>
+                            )}
+                        </Space>
+                        {current < 1 && (
+                            <Button
+                                type="primary"
+                                onClick={() => Cancel()}
+                                style={{
+                                    width: '120px',
+                                    height: '50px',
+                                    fontWeight: '600'
+                                }}
+                            >
+                                취소
                             </Button>
                         )}
 
