@@ -239,8 +239,24 @@ app.post('/XBT/User_Info', async (req, res) => {
         conn = await XBTpool.getConnection();
         const query = `Select CAST(User_No AS CHAR) AS User_No, User_Id, User_Nm, Edu_Code, Edu_Name, Company, Hp_No, Email FROM XBT_STU_USER Where User_Id = ? And User_Nm = ? `;
         const result = await conn.query(query, [Edu_Id, Edu_Nm]);
+
+        const edu_query = ` Select (Select Write_Date From XBT_STU_USER Where USER_ID = ?) AS Admi_Date
+        , USER_ID, PROC_CD, EDU_NAME, EDU_START_DATE, EDU_END_DATE, CAST(DATEDIFF(EDU_END_DATE, EDU_START_DATE) AS SIGNED) + 1 AS DAYS_PASSED, PASS_YN 
+        From XBT_BASELINE_STUDENT_INFO Where USER_ID = ?`;
+        const Eresult = await conn.query(edu_query, [Edu_Id, Edu_Id]);
+        const Edu_Result = Eresult.map((row) => ({
+            Admi_Date: row.Admi_Date,
+            USER_ID: row.USER_ID,
+            EDU_NAME: row.EDU_NAME,
+            EDU_START_DATE: row.EDU_START_DATE,
+            EDU_END_DATE: row.EDU_END_DATE,
+            DAYS_PASSED: Number(row.DAYS_PASSED), // BigInt를 숫자로 변환
+            PASS_YN: row.PASS_YN,
+            PROC_CD: Number(row.PROC_CD)
+        }));
+
         res.json({
-            RET_DATA: result,
+            RET_DATA: { result, Edu_Result },
             RET_DESC: `연동 성공`,
             RET_CODE: '0000'
         });
@@ -562,6 +578,73 @@ app.post('/User/Member_Update', verifyBearerToken, async (req, res) => {
     }
 });
 // 회원 정보 수정 End
+//=============================================================
+
+//=============================================================
+// MyPage 교육 상세정보 Start
+app.post('/XBT/MyPage_Edu_Detail', async (req, res) => {
+    const { User_Id, Proc_Cd } = req.body;
+    let conn;
+    try {
+        conn = await XBTpool.getConnection();
+        //-- XBT 평가
+        const XBT_QUERY = `Select INSERT_DATE, (RIGHT_CNT + WRONG_CNT)AS XBT_Quest_Cnt, RIGHT_CNT AS XBT_Right_Cnt, WRONG_CNT AS XBT_Wrong_Cnt,(RIGHT_CNT * 100 / (RIGHT_CNT + WRONG_CNT)) AS XTB_Avg 
+                From XBT_BASELINE_EVALUATION Where USER_ID = ? And PROC_CD = ?`;
+        const Xresult = await conn.query(XBT_QUERY, [User_Id, Proc_Cd]);
+        const XBTRESULT = Xresult.map((row) => ({
+            INSERT_DATE: row.INSERT_DATE,
+            XBT_Quest_Cnt: Number(row.XBT_Quest_Cnt),
+            XBT_Right_Cnt: Number(row.XBT_Right_Cnt),
+            XBT_Wrong_Cnt: Number(row.XBT_Wrong_Cnt),
+            XTB_Avg: Number(row.XTB_Avg)
+        }));
+        //-- 실기 평가
+        const PRACTICE_QUERY = `Select INSERT_DATE, PRACTICE_BEFORE_SCORE AS PRACTICE_SCORE From XBT_BASELINE_STUDENT_INFO Where USER_ID = ? And PROC_CD = ?`;
+        const Presult = await conn.query(PRACTICE_QUERY, [User_Id, Proc_Cd]);
+        const PRACTICERESULT = Presult.map((row) => ({
+            INSERT_DATE: row.INSERT_DATE,
+            PRACTICE_SCORE: Number(row.PRACTICE_SCORE)
+        }));
+        //-- 이론 평가
+        const THEORY_QUERY = `Select INSERT_DATE, (RIGHT_CNT + WRONG_CNT)AS THEORY_Quest_Cnt, RIGHT_CNT AS THEORY_Right_Cnt, WRONG_CNT AS THEORY_Wrong_Cnt, GAIN_SCORE AS THEORY_Avg
+                From XBT_BASELINE_THEORY Where USER_ID = ? And PROC_CD = ?`;
+        const Tresult = await conn.query(THEORY_QUERY, [User_Id, Proc_Cd]);
+        const THEORYRESULT = Tresult.map((row) => ({
+            INSERT_DATE: row.INSERT_DATE,
+            THEORY_Quest_Cnt: Number(row.THEORY_Quest_Cnt),
+            THEORY_Right_Cnt: Number(row.THEORY_Right_Cnt),
+            THEORY_Wrong_Cnt: Number(row.THEORY_Wrong_Cnt),
+            THEORY_Avg: Number(row.THEORY_Avg)
+        }));
+        //-- 항공위험무 평가
+        const DANGER_QUERY = `Select INSERT_DATE, (DANGER_RIGHT_CNT + DANGER_WRONG_CNT)AS DANGER_Quest_Cnt, DANGER_RIGHT_CNT AS DANGER_Right_Cnt, DANGER_WRONG_CNT AS DANGER_Wrong_Cnt, 
+                    DANGER_SCORE AS DANGER_Avg
+                    From XBT_BASELINE_THEORY Where USER_ID = ? And PROC_CD = ?`;
+        const Dresult = await conn.query(DANGER_QUERY, [User_Id, Proc_Cd]);
+        const DANGERRESULT = Dresult.map((row) => ({
+            INSERT_DATE: row.INSERT_DATE,
+            DANGER_Quest_Cnt: Number(row.DANGER_Quest_Cnt),
+            DANGER_Right_Cnt: Number(row.DANGER_Right_Cnt),
+            DANGER_Wrong_Cnt: Number(row.DANGER_Wrong_Cnt),
+            DANGER_Avg: Number(row.DANGER_Avg)
+        }));
+
+        res.json({
+            RET_DATA: { XBTRESULT, PRACTICERESULT, THEORYRESULT, DANGERRESULT },
+            RET_CODE: '0000'
+        });
+    } catch (err) {
+        console.error('Error executing MariaDB query:', err);
+        res.json({
+            RET_DATA: null,
+            RET_DESC: `조회 실패_${err}`,
+            RET_CODE: '1000'
+        });
+    } finally {
+        if (conn) return conn.end();
+    }
+});
+// MyPage 교육 상세정보 End
 //=============================================================
 
 //=============================================================

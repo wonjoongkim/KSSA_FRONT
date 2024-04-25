@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMemberInfoMutation } from '../../../hooks/api/MainManagement/MainManagement';
-import { useXbtUserInfoMutation } from '../../../hooks/api/XbtCrossManagement/XbtCrossManagement';
+import { useXbtUserInfoMutation, useXbtMyPageEduDetailMutation } from '../../../hooks/api/XbtCrossManagement/XbtCrossManagement';
 
 import { Card, Row, Col, Input, Button, Space, Divider, Table, Modal } from 'antd';
 import {
@@ -26,9 +26,17 @@ export const MyPage_User = () => {
     const [dataSource, setDataSource] = useState();
     const [xbtChk, setXbtChk] = useState(null);
     const [itemContainer, setItemContainer] = useState(null);
+    const [eduContainer, setEduContainer] = useState(null);
+
+    const [practiceContainer, setPracticeContainer] = useState(null); // 실기 평가 Data
+    const [xbtContainer, setXbtContainer] = useState(null); // XBT 평가 Data
+    const [theoryContainer, setTheoryContainer] = useState(null); // 이론 평가 Data
+    const [dangerContainer, setDangerContainer] = useState(null); // 항공위험물 평가 Data
 
     const DataOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
+    // =========================================================================
+    // 교육생 정보 Start
     const [MemberInfoApi] = useMemberInfoMutation();
     const handelMemberInfo = async () => {
         const MemberInfoResponse = await MemberInfoApi({});
@@ -49,6 +57,8 @@ export const MyPage_User = () => {
             ('');
         }
     };
+    // 교육생 정보 Start
+    // =========================================================================
 
     // ============================================
     // XBT 연동 Start
@@ -61,15 +71,35 @@ export const MyPage_User = () => {
         if (XbtIncludeResponse?.data?.RET_CODE === '0000') {
             setXbtChk(true);
             setItemContainer({
+                // 미사용중...
                 ...itemContainer,
-                User_Nm: XbtIncludeResponse?.data?.RET_DATA[0].User_Nm,
-                Company_Nm: XbtIncludeResponse?.data?.RET_DATA[0].Company,
-                User_Phone: XbtIncludeResponse?.data?.RET_DATA[0].Hp_No,
-                User_Email: XbtIncludeResponse?.data?.RET_DATA[0].Email,
-                Edu_No: XbtIncludeResponse?.data?.RET_DATA[0].User_No,
-                Edu_Code: XbtIncludeResponse?.data?.RET_DATA[0].Edu_Code,
-                Edu_Code_Nm: XbtIncludeResponse?.data?.RET_DATA[0].Edu_Name
+                User_Nm: XbtIncludeResponse?.data?.RET_DATA.result[0].User_Nm,
+                Company_Nm: XbtIncludeResponse?.data?.RET_DATA?.result[0].Company,
+                User_Phone: XbtIncludeResponse?.data?.RET_DATA?.result[0].Hp_No,
+                User_Email: XbtIncludeResponse?.data?.RET_DATA?.result[0].Email,
+                Edu_No: XbtIncludeResponse?.data?.RET_DATA?.result[0].User_No,
+                Edu_Code: XbtIncludeResponse?.data?.RET_DATA?.result[0].Edu_Code,
+                Edu_Code_Nm: XbtIncludeResponse?.data?.RET_DATA?.result[0].Edu_Name
             });
+            setEduContainer(
+                XbtIncludeResponse?.data?.RET_DATA?.Edu_Result.map((E, i) => ({
+                    Key: i + 1,
+                    EduDay: new Date(E.Admi_Date).toLocaleTimeString('ko-KR', DataOptions).substring(0, 12),
+                    EduNm: E.EDU_NAME,
+                    EduDate: `${new Date(E.EDU_START_DATE).toLocaleTimeString('ko-KR', DataOptions).substring(0, 12)} ~ ${new Date(
+                        E.EDU_END_DATE
+                    )
+                        .toLocaleTimeString('ko-KR', DataOptions)
+                        .substring(0, 12)}`,
+                    Attend: `${E.DAYS_PASSED}일`,
+                    CertificateNumber: '-',
+                    Print: '-',
+                    PrintCnt: '-',
+                    UserId: E.USER_ID,
+                    ProcCd: E.PROC_CD
+                }))
+            );
+            console.log(XbtIncludeResponse?.data?.RET_DATA);
         } else {
             Modal.error({
                 content: XbtIncludeResponse?.data?.RET_DESC,
@@ -89,38 +119,6 @@ export const MyPage_User = () => {
         }
     });
 
-    const data = [
-        {
-            Key: '1',
-            EduDay: '2023-12-01',
-            EduNm: '보안검색요원 초기교육',
-            EduDate: '2024-01-08 ~ 2024-01-11',
-            Attend: '4일',
-            CertificateNumber: 'KSSA-2023-보안-00004',
-            Print: 'KSSA-2023-보안-00004',
-            PrintCnt: '1'
-        },
-        {
-            Key: '2',
-            EduDay: '2023-11-12',
-            EduNm: '항공경비 초기교육',
-            EduDate: '2024-11-25 ~ 2024-11-29',
-            Attend: '5일',
-            CertificateNumber: '-',
-            Print: '-',
-            PrintCnt: '-'
-        },
-        {
-            Key: '3',
-            EduDay: '2023-10-27',
-            EduNm: '보안검색요원 정기교육',
-            EduDate: '2024-11-08 ~ 2024-11-11',
-            Attend: '5일',
-            CertificateNumber: 'KSSA-2023-보안-00002',
-            Print: 'KSSA-2023-보안-00002',
-            PrintCnt: '2'
-        }
-    ];
     const columns = [
         {
             title: 'No.',
@@ -141,8 +139,8 @@ export const MyPage_User = () => {
             sorter: {
                 compare: (a, b) => a.EduNm.localeCompare(b.EduNm, 'ko-KR', { sensitivity: 'base' })
             },
-            render: (_, { EduNm }) => (
-                <Button type="text" onClick={() => setOpenModal(true)}>
+            render: (_, { EduNm, UserId, ProcCd }) => (
+                <Button type="text" onClick={() => handel_EduDefalut(UserId, ProcCd)}>
                     {EduNm}
                 </Button>
             ),
@@ -188,6 +186,28 @@ export const MyPage_User = () => {
         }
     ];
 
+    // =========================================================================
+    // 교육생 교육 상세정보 Start
+    const [XbtMyPageEduDetailApi] = useXbtMyPageEduDetailMutation();
+    const handelXbtMyPageEduDetail = async (UserId, ProcCd) => {
+        const XbtMyPageEduDetailResponse = await XbtMyPageEduDetailApi({
+            User_Id: UserId,
+            Proc_Cd: ProcCd
+        });
+        if (XbtMyPageEduDetailResponse?.data?.RET_CODE === '0000') {
+            setPracticeContainer(XbtMyPageEduDetailResponse?.data?.RET_DATA?.PRACTICERESULT[0]);
+            setXbtContainer(XbtMyPageEduDetailResponse?.data?.RET_DATA?.XBTRESULT[0]);
+            setTheoryContainer(XbtMyPageEduDetailResponse?.data?.RET_DATA?.THEORYRESULT[0]);
+            setDangerContainer(XbtMyPageEduDetailResponse?.data?.RET_DATA?.DANGERRESULT[0]);
+            console.log(XbtMyPageEduDetailResponse?.data?.RET_DATA);
+        } else {
+            ('');
+        }
+    };
+
+    // 교육생 교육 상세정보 Start
+    // =========================================================================
+
     const handleTableChange = (pagination, filters, sorter) => {
         setTableParams({
             pagination,
@@ -203,6 +223,11 @@ export const MyPage_User = () => {
     // 평가정보 모달창 닫음
     const handleCloseModal = () => {
         setOpenModal(false);
+    };
+
+    const handel_EduDefalut = (UserId, ProcCd) => {
+        handelXbtMyPageEduDetail(UserId, ProcCd);
+        setOpenModal(true);
     };
 
     useEffect(() => {
@@ -284,7 +309,7 @@ export const MyPage_User = () => {
                                     <Table
                                         columns={columns}
                                         // dataSource={dataSource}
-                                        dataSource={data}
+                                        dataSource={eduContainer}
                                         loading={loading}
                                         onChange={handleTableChange}
                                         style={{ width: '100%' }}
@@ -312,7 +337,12 @@ export const MyPage_User = () => {
                 }}
                 footer={null}
             >
-                <Evaluation />
+                <Evaluation
+                    practiceContainer={practiceContainer}
+                    xbtContainer={xbtContainer}
+                    theoryContainer={theoryContainer}
+                    dangerContainer={dangerContainer}
+                />
             </Modal>
             {/* 평가정보 창 End */}
         </>

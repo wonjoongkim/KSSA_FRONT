@@ -8,10 +8,26 @@ export const xbtCrossManagement = createApi({
         baseUrl: `${BASE_URL}`
     }),
     endpoints: (builder) => ({
-        // XBT 연동 회원정보 가져오기
+        // XBT 연동 회원, 교육 정보 가져오기
         XbtUserInfo: builder.mutation({
             query: (body) => ({
                 url: 'XBT/User_Info',
+                method: 'POST',
+                body: body
+            })
+        }),
+        // XBT 연동 회원 교육 정보 가져오기
+        // XbtMyPageEdu: builder.mutation({
+        //     query: (body) => ({
+        //         url: 'XBT/MyPage_Edu',
+        //         method: 'POST',
+        //         body: body
+        //     })
+        // }),
+        // XBT 연동 회원 교육 상세정보 가져오기
+        XbtMyPageEduDetail: builder.mutation({
+            query: (body) => ({
+                url: 'XBT/MyPage_Edu_Detail',
                 method: 'POST',
                 body: body
             })
@@ -19,4 +35,4 @@ export const xbtCrossManagement = createApi({
     })
 });
 
-export const { useXbtUserInfoMutation } = xbtCrossManagement;
+export const { useXbtUserInfoMutation, useXbtMyPageEduDetailMutation } = xbtCrossManagement;
