@@ -5,7 +5,7 @@ import { Spin, Typography, Row, Col, Card, List, FloatButton, Breadcrumb, Input,
 import { EditOutlined, SearchOutlined, HomeOutlined } from '@ant-design/icons';
 import { useBoardListMutation } from '../../../hooks/api/BoardManagement/BoardManagement';
 import MainCard from 'components/MainCard';
-
+import './Style.css';
 export const Lists = () => {
     const location = useLocation();
     const [loading, setLoading] = useState(true); // 로딩 초기값
@@ -14,15 +14,16 @@ export const Lists = () => {
     const [flagProp, setFlagProp] = useState(null); // 타겟 게시판 명
     const [titleProp, setTitleProp] = useState(null); // 타겟 게시판 타이틀
     const [board_Data, setBoard_Data] = useState([]); // Board Data
-    const onSearch = (value, _e, info) => console.log(info?.source, value);
+    const [board_Search_Data, setBoard_Search_Data] = useState(''); // 게시판 검색 Data
 
     const DataOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
     const [BoardListApi] = useBoardListMutation();
     // 교육안내
-    const handleBoardList = async (flag) => {
+    const handleBoardList = async (flag, search) => {
         const BoardListResponse = await BoardListApi({
-            Board_Type: flag
+            Board_Type: flag,
+            Board_Search: search
         });
         BoardListResponse?.data?.RET_CODE === '0000'
             ? setBoard_Data(
@@ -39,6 +40,13 @@ export const Lists = () => {
         console.log(current, pageSize);
     };
 
+    // 검색 Search
+    const onSearch = (value, _e, info) => {
+        console.log(value);
+        setBoard_Search_Data(value);
+        handleBoardList(flagProp, value);
+    };
+
     useEffect(() => {
         const timerId = setTimeout(() => {
             setLoading(false);
@@ -50,7 +58,7 @@ export const Lists = () => {
         setBoardProp(location.state.board);
         setFlagProp(location.state.flag);
         setTitleProp(location.state.title);
-        handleBoardList(location.state.flag);
+        handleBoardList(location.state.flag, '');
     }, [location.state]);
 
     return (
@@ -95,21 +103,13 @@ export const Lists = () => {
                     {titleProp}
                 </Col>
                 <Col xs={{ span: 10, offset: 0 }} lg={{ span: 16, offset: 0 }}>
-                    <Input
-                        size="large"
-                        placeholder="Search"
-                        prefix={<EditOutlined />}
+                    <Input.Search
+                        placeholder="※ 통합 검색 (제목)"
+                        onSearch={onSearch}
                         allowClear
-                        enterButton="Search"
-                        style={{ height: '55px', borderTopRightRadius: '0px', borderBottomRightRadius: '0px' }}
+                        enterButton
+                        className="custom-search-input"
                     />
-                </Col>
-                <Col xs={{ span: 2, offset: 0 }} lg={{ span: 2, offset: 0 }}>
-                    <Button
-                        icon={<SearchOutlined />}
-                        type="primary"
-                        style={{ height: '55px', width: '40px', borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px' }}
-                    ></Button>
                 </Col>
                 <Col
                     xs={{ span: 5, offset: 1 }}

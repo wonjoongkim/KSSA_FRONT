@@ -5,7 +5,7 @@ import { mainManagement } from '../hooks/api/MainManagement/MainManagement';
 import { loginManagement } from '../hooks/api/LoginManagement/LoginManagement';
 import { contentsManagement } from '../hooks/api/ContentsManagement/ContentsManagement';
 import { preferencesManagement } from '../hooks/api/PreferencesManagement/PreferencesManagement';
-import { curriculumManagement } from '../hooks/api/CurriculumManagement/CurriculumManagement';
+import { pictureManagement } from '../hooks/api/PictureManagement/PictureManagement';
 import { statisticsManagement } from '../hooks/api/StatisticsManagement/StatisticsManagement';
 
 import { calenderManagement } from '../hooks/api/CalenderManagement/CalenderManagement';
@@ -19,7 +19,7 @@ export const store = configureStore({
         [boardManagement.reducerPath]: boardManagement.reducer,
         [calenderManagement.reducerPath]: calenderManagement.reducer,
         [contentsManagement.reducerPath]: contentsManagement.reducer,
-        [curriculumManagement.reducerPath]: curriculumManagement.reducer,
+        [pictureManagement.reducerPath]: pictureManagement.reducer,
         [fileManagement.reducerPath]: fileManagement.reducer,
         [loginManagement.reducerPath]: loginManagement.reducer,
         [mainManagement.reducerPath]: mainManagement.reducer,
@@ -32,7 +32,7 @@ export const store = configureStore({
             .concat(boardManagement.middleware)
             .concat(calenderManagement.middleware)
             .concat(contentsManagement.middleware)
-            .concat(curriculumManagement.middleware)
+            .concat(pictureManagement.middleware)
             .concat(fileManagement.middleware)
             .concat(loginManagement.middleware)
             .concat(mainManagement.middleware)

@@ -209,9 +209,13 @@ const Menus = () => {
                         },
                         {
                             label: '사진자료',
-                            // key: '/contents/Picture'
                             key: '/contents/Picture',
-                            paths: '/contents/Picture'
+                            paths: '/contents/Picture',
+                            state: {
+                                board: '자료실',
+                                flag: 'Picture',
+                                title: '사진자료'
+                            }
                         }
                     ]
                 }

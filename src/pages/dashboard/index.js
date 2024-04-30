@@ -107,7 +107,7 @@ export const DashboardDefault = () => {
     return (
         <>
             <Divider />
-            <Row gutter={[18, 8]}>
+            {/* <Row gutter={[18, 8]}>
                 <Col span={8}>
                     <Card style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F5DC' }}>
                         <Statistic
@@ -141,7 +141,7 @@ export const DashboardDefault = () => {
                     </Card>
                 </Col>
             </Row>
-            <Divider />
+            <Divider /> */}
 
             {/* 교육 스케쥴 Start */}
             <Grid container>
@@ -275,11 +275,13 @@ export const DashboardDefault = () => {
                     maskClosable={false}
                     onOk={Modal_Boards}
                     closable={false}
-                    width={567}
+                    centered
+                    width={'auto'}
                     style={{
-                        zIndex: 999
+                        top: '85px',
+                        zIndex: 99999
                     }}
-                    footer={[]}
+                    footer={null}
                 >
                     <Spin tip="Loading..." spinning={loading}>
                         <Row
@@ -381,7 +383,7 @@ export const DashboardDefault = () => {
                     <Divider />
                     <Space style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Button type="primary" onClick={Modal_Boards} style={{ width: '120px', height: '50px', fontWeight: '600' }}>
-                            취소
+                            Close
                         </Button>
                     </Space>
                 </Modal>

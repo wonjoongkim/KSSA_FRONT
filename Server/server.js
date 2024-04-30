@@ -758,7 +758,7 @@ app.post('/User/Board_Main_View', async (req, res) => {
 //=============================================================
 // Board List Start
 app.post('/User/Board_List', async (req, res) => {
-    const { Board_Type } = req.body;
+    const { Board_Type, Board_Search } = req.body;
     let conn;
     try {
         conn = await pool.getConnection();
@@ -766,8 +766,8 @@ app.post('/User/Board_List', async (req, res) => {
                 SELECT CAST(COUNT(Idx) AS UNSIGNED) 
                 FROM NKSSA_Board 
                 WHERE Board_Type = ?
-            ) AS Total, Idx, Board_Type, Subject, Contents, File_Key, Visited, InDate From NKSSA_Board Where Board_Type = ? And State = '0'`;
-        const result = await conn.query(query, [Board_Type, Board_Type]);
+            ) AS Total, Idx, Board_Type, Subject, Contents, File_Key, Visited, InDate From NKSSA_Board Where Board_Type = ? And State = '0' And Subject like ?`;
+        const result = await conn.query(query, [Board_Type, Board_Type, `%${Board_Search}%`]);
         const serializedResult = result.map((row) => ({
             Total: String(row.Total),
             Idx: row.Idx,
@@ -846,15 +846,43 @@ app.post('/User/Board_View', async (req, res) => {
 //=============================================================
 // Picture List Start
 app.post('/User/Picture_List', async (req, res) => {
+    const { Board_Type, Board_Search } = req.body;
     let conn;
+
+    const query = `Select (
+        SELECT CAST(COUNT(Idx) AS UNSIGNED) 
+        FROM NKSSA_Board 
+        WHERE Board_Type = ?
+    ) AS Total, Idx, Board_Type, Subject, Contents, File_Key, Visited, InDate, Unit From NKSSA_Board Where Board_Type = ? And State = '0' And Subject like ?`;
+
     try {
         conn = await pool.getConnection();
-        const query =
-            "Select Idx, Subject, Personnel, Contents, Visited, State, File_Idx, InDate, InId From NKSSA_Picture Where State = '0' ";
-        const result = await conn.query(query, [Board_Type]);
+        const result = await conn.query(query, [Board_Type, Board_Type, `%${Board_Search}%`]); // 게시물 조회
 
+        const file_query = 'Select File_Path From NKSSA_FileAttach Where File_Key = ?'; // 파일 조회
+
+        // 결과를 담을 배열 선언
+        const resultsWithFiles = [];
+
+        for (const row of result) {
+            const file_result = await conn.query(file_query, row.File_Key);
+
+            resultsWithFiles.push({
+                ...row,
+                Total: String(row.Total),
+                Idx: row.Idx,
+                Board_Type: row.Board_Type,
+                Subject: row.Subject,
+                Contents: row.Contents,
+                File_Key: row.File_Key,
+                Visited: row.Visited,
+                InDate: row.InDate,
+                Unit: row.Unit,
+                Images: file_result
+            });
+        }
         res.json({
-            RET_DATA: result,
+            RET_DATA: { resultsWithFiles },
             RET_CODE: '0000'
         });
     } catch (err) {
@@ -868,7 +896,7 @@ app.post('/User/Picture_List', async (req, res) => {
         if (conn) return conn.end();
     }
 });
-// Board List End
+// Picture List End
 //=============================================================
 
 //=============================================================
@@ -879,12 +907,15 @@ app.post('/User/Picture_View', async (req, res) => {
     try {
         conn = await pool.getConnection();
         // 게시물 조회
-        const query = 'Select Idx, Subject, Personnel, Contents, Visited, State, File_Idx, InDate, InId From NKSSA_Picture Where Idx = ?';
+        const query = `Select (
+            SELECT CAST(COUNT(Idx) AS UNSIGNED) 
+            FROM NKSSA_Board 
+            WHERE Board_Type = ?
+        ) AS Total, Idx, Board_Type, Subject, Contents, File_Key, Visited, InDate, Unit From NKSSA_Picture Where Idx = ?`;
         const result = await conn.query(query, [Board_Type, Idx]);
 
         // 파일 조회
-        const file_query =
-            'Select File_Key, Original_FileName, Save_FileName, File_Path, File_Ext, File_Size From NKSSA_FileAttach Where File_Key = ?';
+        const file_query = `Select File_Path From NKSSA_FileAttach Where File_Key = ?`;
         const file_result = await conn.query(file_query, [result[0].File_Key]);
         res.json({
             RET_DATA: { result, file_result },
@@ -901,7 +932,7 @@ app.post('/User/Picture_View', async (req, res) => {
         if (conn) return conn.end();
     }
 });
-// Board View End
+// Picture View End
 //=============================================================
 
 //=============================================================
