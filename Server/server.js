@@ -16,7 +16,8 @@ const { v4: uuidv4 } = require('uuid'); // UUID 생성을 위한 라이브러리
 //#############################################################
 
 const app = express();
-const port = 4000;
+const port = 80;
+// const port = 3306;
 const secretKey = process.env.SECRETKEY;
 
 //=============================================================
