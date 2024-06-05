@@ -1,9 +1,14 @@
 import Slider from 'react-slick';
-import { Card, Image } from 'antd';
+import { Card, Tooltip, Image } from 'antd';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './Style.css';
+import lool_Image_1 from '../../images/lool_Image_1.png';
+import lool_Image_2 from '../../images/lool_Image_2.png';
+import lool_Image_3 from '../../images/lool_Image_3.png';
+import lool_Image_4 from '../../images/lool_Image_4.png';
+import lool_Image_5 from '../../images/lool_Image_5.png';
 
 const Slick = () => {
     const settings = {
@@ -30,7 +35,19 @@ const Slick = () => {
 
     const boxStyle = {
         width: '100%',
-        height: '120px'
+        height: '60px'
+    };
+
+    const LogoLink = (Links) => {
+        const windowFeatures = `
+            menubar=yes,
+            location=yes,
+            resizable=yes,
+            scrollbars=yes,
+            status=yes,
+            width=1280
+        `.replace(/\s+/g, '');
+        window.open(Links, '_blank', windowFeatures);
     };
 
     return (
@@ -44,113 +61,46 @@ const Slick = () => {
             <div style={boxStyle} justify="space-evenly" align="center">
                 <Slider {...settings}>
                     <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            1.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                        <Image.PreviewGroup preview={false}>
+                            <Tooltip title="인천국제공항보안" color="#108ee9">
+                                <Image src={lool_Image_1} style={{ cursor: 'pointer' }} onClick={() => LogoLink('http://airportsc.kr/')} />
+                            </Tooltip>
                         </Image.PreviewGroup>
                     </div>
                     <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            2.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                        <Image.PreviewGroup preview={false}>
+                            <Tooltip title="인천국제공항공사" color="#108ee9">
+                                <Image
+                                    src={lool_Image_2}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => LogoLink('https://www.airport.kr/co/ko/index.do')}
+                                />
+                            </Tooltip>
                         </Image.PreviewGroup>
                     </div>
                     <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            3.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                        <Image.PreviewGroup preview={false}>
+                            <Tooltip title="한서대학교" color="#108ee9">
+                                <Image
+                                    src={lool_Image_3}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => LogoLink('https://www.hanseo.ac.kr/intro2/intro.html')}
+                                />
+                            </Tooltip>
                         </Image.PreviewGroup>
                     </div>
                     <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            4.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                        <Image.PreviewGroup preview={false}>
+                            <Tooltip title="항공보안협회" color="#108ee9">
+                                <Image src={lool_Image_4} style={{ cursor: 'pointer' }} onClick={() => LogoLink('http://www.kasa21.kr/')} />
+                            </Tooltip>
                         </Image.PreviewGroup>
                     </div>
                     <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            5.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
-                        </Image.PreviewGroup>
-                    </div>
-                    <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            6.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
-                        </Image.PreviewGroup>
-                    </div>
-                    <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            7.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
-                        </Image.PreviewGroup>
-                    </div>
-                    <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            8.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
-                        </Image.PreviewGroup>
-                    </div>
-                    <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            9.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
-                        </Image.PreviewGroup>
-                    </div>
-                    <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            10.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
-                        </Image.PreviewGroup>
-                    </div>
-                    <div>
-                        <Image.PreviewGroup
-                            preview={{
-                                onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                            }}
-                        >
-                            11.
-                            <Image width={100} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />
+                        <Image.PreviewGroup preview={false}>
+                            <Tooltip title="항공보안학회" color="#108ee9">
+                                <Image src={lool_Image_5} style={{ cursor: 'pointer' }} onClick={() => LogoLink('http://kafas.or.kr/')} />
+                            </Tooltip>
                         </Image.PreviewGroup>
                     </div>
                 </Slider>

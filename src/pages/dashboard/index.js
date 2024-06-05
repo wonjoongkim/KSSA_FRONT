@@ -268,7 +268,7 @@ export const DashboardDefault = () => {
                 </Col>
             </Row>
             {/* 교육안내, 공지사항 End */}
-            <FloatButton.BackTop />
+
             {modal_Board && (
                 <Modal
                     visible={true}
@@ -388,6 +388,7 @@ export const DashboardDefault = () => {
                     </Space>
                 </Modal>
             )}
+            <FloatButton.BackTop />
         </>
     );
 };

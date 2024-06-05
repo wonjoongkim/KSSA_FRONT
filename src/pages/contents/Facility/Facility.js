@@ -211,6 +211,7 @@ export const Facility = () => {
                                                         style={{ display: 'grid' }}
                                                     />
                                                 </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>XBT 교육장</div>
                                             </Col>
                                             <Col
                                                 xs={{
@@ -236,6 +237,9 @@ export const Facility = () => {
                                                         alt="Responsive Image"
                                                         style={{ display: 'grid' }}
                                                     />
+                                                </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    X-Ray 실습실
                                                 </div>
                                             </Col>
                                             <Col
@@ -263,6 +267,9 @@ export const Facility = () => {
                                                         style={{ display: 'grid' }}
                                                     />
                                                 </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    X-Ray 실습 장비(단방향)
+                                                </div>
                                             </Col>
                                             <Col
                                                 xs={{
@@ -272,10 +279,6 @@ export const Facility = () => {
                                                 lg={{
                                                     span: 6,
                                                     offset: 2
-                                                }}
-                                                style={{
-                                                    borderRadius: '8px',
-                                                    backgroundColor: '#efefef'
                                                 }}
                                             >
                                                 <div
@@ -292,6 +295,9 @@ export const Facility = () => {
                                                         alt="Responsive Image"
                                                         style={{ display: 'grid' }}
                                                     />
+                                                </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    항공경비보안교육장
                                                 </div>
                                             </Col>
                                             <Col
@@ -318,6 +324,9 @@ export const Facility = () => {
                                                         alt="Responsive Image"
                                                         style={{ display: 'grid' }}
                                                     />
+                                                </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    X-Ray 실습 장비(양방향)
                                                 </div>
                                             </Col>
                                             {/* <Col
@@ -366,6 +375,9 @@ export const Facility = () => {
                                                         style={{ display: 'grid' }}
                                                     />
                                                 </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    XBT교육용 프로그램
+                                                </div>
                                             </Col>
                                             <Col
                                                 xs={{
@@ -391,6 +403,9 @@ export const Facility = () => {
                                                         alt="Responsive Image"
                                                         style={{ display: 'grid' }}
                                                     />
+                                                </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    위험물품 Kit Box
                                                 </div>
                                             </Col>
                                             <Col
@@ -418,6 +433,9 @@ export const Facility = () => {
                                                         style={{ display: 'grid' }}
                                                     />
                                                 </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    학습샘플 및 교재
+                                                </div>
                                             </Col>
                                             <Col
                                                 xs={{
@@ -443,6 +461,9 @@ export const Facility = () => {
                                                         alt="Responsive Image"
                                                         style={{ display: 'grid' }}
                                                     />
+                                                </div>
+                                                <div style={{ textAlign: 'center', marginTop: '10px', fontWeight: '500' }}>
+                                                    보안장비 Kit Box
                                                 </div>
                                             </Col>
                                         </Row>
