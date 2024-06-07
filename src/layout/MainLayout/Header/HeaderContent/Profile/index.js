@@ -213,7 +213,7 @@ const Profile = () => {
                 </>
             ) : (
                 <>
-                    <span style={{ marginRight: '5px' }}>
+                    {/* <span style={{ marginRight: '5px' }}>
                         <Tooltip title="회원가입" color="#2db7f5" key="#2db7f5">
                             <IconButton
                                 disableRipple
@@ -230,7 +230,7 @@ const Profile = () => {
                                 <span style={{ marginLeft: '0px', width: '55px' }}>회원가입</span>
                             </IconButton>
                         </Tooltip>
-                    </span>
+                    </span> */}
                     <span>
                         <Tooltip title="로그인" color="#2db7f5" key="#2db7f5">
                             <IconButton

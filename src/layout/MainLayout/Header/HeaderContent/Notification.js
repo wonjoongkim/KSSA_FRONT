@@ -69,7 +69,7 @@ const Notification = () => {
 
     return (
         <Box sx={{ flexShrink: 0, ml: 0.75 }}>
-            <IconButton
+            {/* <IconButton
                 disableRipple
                 color="secondary"
                 sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor }}
@@ -84,7 +84,7 @@ const Notification = () => {
                     <BellOutlined style={{ fontSize: '15px' }} />
                     <span style={{ marginLeft: '-2px', width: '30px' }}>알림</span>
                 </Badge>
-            </IconButton>
+            </IconButton> */}
             <Popper
                 placement={matchesXs ? 'bottom' : 'bottom-end'}
                 open={open}
