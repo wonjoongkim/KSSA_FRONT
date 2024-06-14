@@ -202,19 +202,32 @@ export const DashboardDefault = () => {
                             bordered
                             dataSource={board_DataE}
                             renderItem={(item) => (
-                                <List.Item style={{ fontSize: '18px', fontWeight: '600' }}>
+                                <List.Item style={{ fontSize: '17px', fontWeight: '600' }}>
                                     <List.Item.Meta
                                         title={
-                                            <Button
-                                                type="text"
-                                                onClick={() => handelBoardMainView('Education', item.Idx)}
-                                                style={{ fontSize: '18px', fontWeight: '600' }}
-                                            >
-                                                {item.title}
-                                            </Button>
+                                            <Tooltip title={item.title}>
+                                                <button
+                                                    onClick={() => handelBoardMainView('Education', item.Idx)}
+                                                    style={{
+                                                        fontSize: '17px',
+                                                        fontWeight: '600',
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        display: 'block',
+                                                        width: '100%',
+                                                        textAlign: 'left',
+                                                        border: '0px',
+                                                        backgroundColor: '#fff',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    {item.title}
+                                                </button>
+                                            </Tooltip>
                                         }
                                     />
-                                    <div style={{ width: '110px', textAlign: 'right' }}>{item.date}</div>
+                                    <div style={{ width: '90px', textAlign: 'right' }}>{item.date}</div>
                                 </List.Item>
                             )}
                         />
@@ -248,19 +261,32 @@ export const DashboardDefault = () => {
                             bordered
                             dataSource={board_DataN}
                             renderItem={(item) => (
-                                <List.Item style={{ fontSize: '18px', fontWeight: '600' }}>
+                                <List.Item style={{ fontSize: '17px', fontWeight: '600' }}>
                                     <List.Item.Meta
                                         title={
-                                            <Button
-                                                type="text"
-                                                onClick={() => handelBoardMainView('Notice', item.Idx)}
-                                                style={{ fontSize: '18px', fontWeight: '600' }}
-                                            >
-                                                {item.title}
-                                            </Button>
+                                            <Tooltip title={item.title}>
+                                                <button
+                                                    onClick={() => handelBoardMainView('Notice', item.Idx)}
+                                                    style={{
+                                                        fontSize: '17px',
+                                                        fontWeight: '600',
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        display: 'block',
+                                                        width: '100%',
+                                                        textAlign: 'left',
+                                                        border: '0px',
+                                                        backgroundColor: '#fff',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    {item.title}
+                                                </button>
+                                            </Tooltip>
                                         }
                                     />
-                                    <div style={{ width: '110px', textAlign: 'right' }}>{item.date}</div>
+                                    <div style={{ width: '90px', textAlign: 'right' }}>{item.date}</div>
                                 </List.Item>
                             )}
                         />
@@ -323,62 +349,66 @@ export const DashboardDefault = () => {
                                 <div dangerouslySetInnerHTML={{ __html: board_DataV?.Contents }} />
                             </Col>
                         </Row>
-                        <Row
-                            gutter={[0, 10]}
-                            style={{
-                                border: '2px solid #ebe9e9',
-                                borderRadius: '12px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                padding: '10px 20px'
-                            }}
-                        >
-                            {board_FileData?.map((d, i) => (
-                                <>
-                                    <Col xs={11} lg={16} style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
-                                        <a href="#">
-                                            <FileDoneOutlined /> {d.Original_FileName}
-                                        </a>
-                                    </Col>
-                                    <Col xs={13} lg={8} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                                        <Space>
-                                            <Tooltip
-                                                title={<span style={{ fontSize: '13px' }}>다운로드</span>}
-                                                color={'#f50'}
-                                                placement="top"
-                                            >
-                                                <Button
-                                                    type="default"
-                                                    icon={<DownloadOutlined />}
-                                                    style={{
-                                                        height: '30px',
-                                                        width: '45px',
-                                                        backgroundColor: '#efefef',
-                                                        fontSize: '13px'
-                                                    }}
-                                                ></Button>
-                                            </Tooltip>
-                                            <Tooltip
-                                                title={<span style={{ fontSize: '13px' }}>미리보기</span>}
-                                                color={'#108ee9'}
-                                                placement="top"
-                                            >
-                                                <Button
-                                                    type="default"
-                                                    icon={<EyeOutlined />}
-                                                    style={{
-                                                        height: '30px',
-                                                        width: '45px',
-                                                        backgroundColor: '#efefef',
-                                                        fontSize: '13px'
-                                                    }}
-                                                ></Button>
-                                            </Tooltip>
-                                        </Space>
-                                    </Col>
-                                </>
-                            ))}
-                        </Row>
+                        {board_FileData.length > 0 ? (
+                            <Row
+                                gutter={[0, 10]}
+                                style={{
+                                    border: '2px solid #ebe9e9',
+                                    borderRadius: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: '10px 20px'
+                                }}
+                            >
+                                {board_FileData?.map((d, i) => (
+                                    <>
+                                        <Col xs={11} lg={16} style={{ display: 'flex', alignItems: 'center', justifyContent: 'start' }}>
+                                            <a href="#">
+                                                <FileDoneOutlined /> {d.Original_FileName}
+                                            </a>
+                                        </Col>
+                                        <Col xs={13} lg={8} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                            <Space>
+                                                <Tooltip
+                                                    title={<span style={{ fontSize: '13px' }}>다운로드</span>}
+                                                    color={'#f50'}
+                                                    placement="top"
+                                                >
+                                                    <Button
+                                                        type="default"
+                                                        icon={<DownloadOutlined />}
+                                                        style={{
+                                                            height: '30px',
+                                                            width: '45px',
+                                                            backgroundColor: '#efefef',
+                                                            fontSize: '13px'
+                                                        }}
+                                                    ></Button>
+                                                </Tooltip>
+                                                <Tooltip
+                                                    title={<span style={{ fontSize: '13px' }}>미리보기</span>}
+                                                    color={'#108ee9'}
+                                                    placement="top"
+                                                >
+                                                    <Button
+                                                        type="default"
+                                                        icon={<EyeOutlined />}
+                                                        style={{
+                                                            height: '30px',
+                                                            width: '45px',
+                                                            backgroundColor: '#efefef',
+                                                            fontSize: '13px'
+                                                        }}
+                                                    ></Button>
+                                                </Tooltip>
+                                            </Space>
+                                        </Col>
+                                    </>
+                                ))}
+                            </Row>
+                        ) : (
+                            ''
+                        )}
                     </Spin>
                     <Divider />
                     <Space style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
